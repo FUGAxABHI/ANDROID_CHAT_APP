@@ -3,10 +3,12 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:frontend/auth_service.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:record/record.dart'; // Import for audio recording
-import 'package:just_audio/just_audio.dart'; // Import for audio playback
-import 'package:path_provider/path_provider.dart'; // For temporary directory
-import 'package:path/path.dart' as p; // For path manipulation
+import 'package:record/record.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'package:path/path.dart' as p;
+
 
 class PrivateChatScreen extends StatefulWidget {
   final String friendUsername;
@@ -25,9 +27,9 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
   final AuthService _authService = AuthService();
 
   bool _isRecording = false;
-  final Record _audioRecorder = Record();
+  final AudioRecorder _audioRecorder = AudioRecorder();
   final AudioPlayer _audioPlayer = AudioPlayer();
-  String? _audioPath; // Path to the recorded audio file
+  String? _audioPath;
 
   @override
   void initState() {
@@ -39,11 +41,9 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
     final token = await _authService.getToken();
 
     if (token == null) {
-      // Handle not logged in
       return;
     }
 
-    // Decode token to get current username
     try {
       final parts = token.split('.');
       if (parts.length != 3) {
@@ -55,27 +55,27 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
       });
     } catch (e) {
       print('Error decoding token: $e');
-      // Handle invalid token
       return;
     }
 
     socket = IO.io('http://localhost:3000', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
-      'extraHeaders': {'x-auth-token': token}, // Send token with connection
-      'auth': {'token': token}, // Send token for Socket.IO middleware
+      'extraHeaders': {'x-auth-token': token},
+      'auth': {'token': token},
     });
 
     socket.connect();
 
     socket.onConnect((_) {
       print('Connected to private chat socket');
-      // Request message history
-      socket.emit('get private messages', {'withUser': widget.friendUsername}, (data) {
-        setState(() {
-          _messages.clear();
-          _messages.addAll(data.cast<Map<String, dynamic>>());
-        });
+      socket.emit('get private messages', {'withUser': widget.friendUsername});
+    });
+
+    socket.on('private messages', (data) {
+      setState(() {
+        _messages.clear();
+        _messages.addAll(data.cast<Map<String, dynamic>>());
       });
     });
 
@@ -94,7 +94,7 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
       if (await _audioRecorder.hasPermission()) {
         final directory = await getTemporaryDirectory();
         _audioPath = p.join(directory.path, 'audio_${DateTime.now().millisecondsSinceEpoch}.m4a');
-        await _audioRecorder.start(path: _audioPath);
+        await _audioRecorder.start(const RecordConfig(), path: _audioPath!);
         setState(() {
           _isRecording = true;
         });
@@ -109,11 +109,11 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
       final path = await _audioRecorder.stop();
       setState(() {
         _isRecording = false;
-        _audioPath = path; // Update _audioPath with the final recorded file path
+        _audioPath = path;
       });
       if (_audioPath != null) {
-        final audioFile = await _audioRecorder.getWavFile(); // Get the recorded file
-        final bytes = await audioFile.readAsBytes();
+        final file = File(_audioPath!);
+        final bytes = await file.readAsBytes();
         final base64Audio = base64Encode(bytes);
         _sendMessage(isVoice: true, voiceData: base64Audio);
       }

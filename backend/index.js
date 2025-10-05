@@ -180,13 +180,13 @@ io.on('connection', (socket) => {
     console.log(`Private message from ${senderUsername} to ${to}: ${message}`);
   });
 
-  socket.on('get private messages', ({ withUser }, callback) => {
+  socket.on('get private messages', ({ withUser }) => {
     const currentUser = socket.user.username;
     const user = users.find(u => u.username === currentUser);
     if (user && user.privateMessages[withUser]) {
-      callback(user.privateMessages[withUser]);
+      socket.emit('private messages', user.privateMessages[withUser]);
     } else {
-      callback([]);
+      socket.emit('private messages', []);
     }
   });
 
