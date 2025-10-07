@@ -1,218 +1,242 @@
 const express = require('express');
 const http = require('http');
-const socketIo = require('socket.io');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const { Server } = require('socket.io');
 const cors = require('cors');
+require('dotenv').config();
+const { connectDB } = require('./config/db');
+const logger = require('./utils/logger');
+const jwt = require('jsonwebtoken');
+const User = require('./models/User');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIo(server);
-
-const SECRET_KEY = 'your_secret_key'; // Replace with a strong, environment-variable-based secret in production
-
-app.use(express.json()); // For parsing application/json
-app.use(cors()); // Enable CORS for all routes
-
-const users = []; // In-memory user store. In a real app, use a database.
-
-// Registration Endpoint
-app.post('/register', async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required' });
-  }
-
-  if (users.find(user => user.username === username)) {
-    return res.status(409).json({ message: 'Username already exists' });
-  }
-
-  try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = { username, password: hashedPassword, friends: [], pendingRequests: [], privateMessages: {} };
-    users.push(newUser);
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    res.status(500).json({ message: 'Error registering user', error: error.message });
+const io = new Server(server, {
+  cors: {
+    origin: "*", // Allow all origins for now, refine later
+    methods: ["GET", "POST"]
   }
 });
 
-// Login Endpoint
-app.post('/login', async (req, res) => {
-  const { username, password } = req.body;
-
-  if (!username || !password) {
-    return res.status(400).json({ message: 'Username and password are required' });
-  }
-
-  const user = users.find(u => u.username === username);
-  if (!user) {
-    return res.status(401).json({ message: 'Invalid credentials' });
-  }
-
+const socketAuthMiddleware = async (socket, next) => {
   try {
-    const isPasswordValid = await bcrypt.compare(password, user.password);
-    if (!isPasswordValid) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+    const token = socket.handshake.auth.token || socket.handshake.headers['x-auth-token'];
+    logger.info(`[Auth Middleware] Received token: ${token ? 'present' : 'absent'}`);
+
+    if (!token) {
+      logger.error('[Auth Middleware] Authentication error: No token provided.');
+      return next(new Error('Authentication error: No token provided.'));
     }
 
-    const token = jwt.sign({ username: user.username }, SECRET_KEY, { expiresIn: '1h' });
-    res.status(200).json({ message: 'Logged in successfully', token });
-  } catch (error) {
-    res.status(500).json({ message: 'Error logging in', error: error.message });
-  }
-});
-
-const messages = []; // Stores message history
-const connectedUsers = {}; // Stores connected users: socket.id -> username
-
-app.get('/api/users/search', (req, res) => {
-  const query = req.query.q;
-  if (!query) {
-    return res.status(400).json({ message: 'Query parameter "q" is required' });
-  }
-
-  const searchResults = users
-    .filter(user => user.username.toLowerCase().includes(query.toLowerCase()))
-    .map(user => user.username);
-
-  console.log('Search query:', query, 'Results:', searchResults); // Debug log
-
-  res.json(searchResults);
-});
-
-app.post('/api/friends/request', authenticateToken, (req, res) => {
-  const { receiverUsername } = req.body;
-  const senderUsername = req.user.username; // From authenticateToken middleware
-
-  if (!receiverUsername) {
-    return res.status(400).json({ message: 'Receiver username is required' });
-  }
-
-  const receiver = users.find(u => u.username === receiverUsername);
-  if (!receiver) {
-    return res.status(404).json({ message: 'Receiver not found' });
-  }
-
-  if (senderUsername === receiverUsername) {
-    return res.status(400).json({ message: 'Cannot send friend request to yourself' });
-  }
-
-  // Check if already friends
-  if (receiver.friends && receiver.friends.includes(senderUsername)) {
-    return res.status(400).json({ message: 'Already friends' });
-  }
-
-  // Check if request already sent
-  if (receiver.pendingRequests && receiver.pendingRequests.includes(senderUsername)) {
-    return res.status(400).json({ message: 'Friend request already sent' });
-  }
-
-  // Add sender to receiver's pending requests
-  if (!receiver.pendingRequests) {
-    receiver.pendingRequests = [];
-  }
-  receiver.pendingRequests.push(senderUsername);
-
-  console.log(`Friend request sent from ${senderUsername} to ${receiverUsername}. Receiver pending requests:`, receiver.pendingRequests);
-  res.status(200).json({ message: 'Friend request sent successfully' });
-});
-
-// Middleware to authenticate JWT token for Socket.IO connections
-io.use(async (socket, next) => {
-  const token = socket.handshake.auth.token;
-  if (!token) {
-    return next(new Error('Authentication error: Token not provided'));
-  }
-  try {
-    const decoded = jwt.verify(token, SECRET_KEY);
-    socket.user = decoded; // Attach user info to socket
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    socket.user = await User.findById(decoded.id).select('-password'); // Attach user to socket
+    if (!socket.user) {
+      logger.error('[Auth Middleware] Authentication error: User not found for decoded ID.');
+      return next(new Error('Authentication error: User not found.'));
+    }
+    connectedUsers[socket.user.username] = socket.id; // Update connectedUsers here
+    logger.info(`[Auth Middleware] User ${socket.user.username} authenticated successfully. connectedUsers: ${JSON.stringify(connectedUsers)}`);
     next();
-  } catch (err) {
-    next(new Error('Authentication error: Invalid token'));
+  } catch (error) {
+    logger.error(`[Auth Middleware] Authentication error: ${error.message}`);
+    next(new Error('Authentication error: Invalid token.'));
   }
+};
+
+io.use(socketAuthMiddleware);
+
+app.use(cors());
+app.use(express.json());
+
+// Auth routes
+const authRoutes = require('./routes/auth');
+app.use('/api/auth', authRoutes);
+
+// User routes
+const userRoutes = require('./routes/userRoutes');
+app.use('/api/users', userRoutes);
+
+// Friends routes
+const friendsRoutes = require('./routes/friends');
+app.use('/api/friends', friendsRoutes);
+
+// Chat routes
+const chatRoutes = require('./routes/chatRoutes');
+app.use('/api/chat', chatRoutes);
+
+app.get('/', (req, res) => {
+  res.send('Backend is running!');
 });
 
-// Socket.IO setup
+const Message = require('./models/Message');
+const connectedUsers = {};
+
 io.on('connection', (socket) => {
-  console.log('a user connected');
+  logger.info('a user connected');
 
-  // Send message history to the newly connected user
-  socket.emit('message history', messages);
+  if (socket.user) {
+    socket.username = socket.user.username;
+    // connectedUsers[socket.username] is already set in auth middleware
+    logger.info(`[Connected Users] User ${socket.username} (ID: ${socket.id}) connected. connectedUsers: ${JSON.stringify(connectedUsers)}`);
+    io.emit('user joined', socket.username);
 
-  socket.on('set username', (username) => {
-    connectedUsers[socket.id] = username;
-    io.emit('user joined', username);
-    console.log(`${username} joined the chat`);
+    // Fetch and send unread messages to the newly connected user
+    (async () => {
+      try {
+        const unreadMessages = await Message.find({ recipient: socket.user._id, isRead: false }).populate('sender', 'username').sort({ timestamp: 1 });
+        if (unreadMessages.length > 0) {
+          logger.info(`[Offline Messages] Found ${unreadMessages.length} unread messages for ${socket.username}. Emitting...`);
+          for (const msg of unreadMessages) {
+            socket.emit('private message', { message: msg });
+          }
+          // Mark these messages as read after emitting
+          await Message.updateMany({ _id: { $in: unreadMessages.map(msg => msg._id) } }, { $set: { isRead: true } });
+          logger.info(`[Offline Messages] ${unreadMessages.length} messages marked as read for ${socket.username}.`);
+        }
+      } catch (error) {
+        logger.error(`[Offline Messages] Error fetching/emitting unread messages for ${socket.username}: ${error.message}`);
+      }
+    })();
+
+  } else {
+    logger.warning(`A user connected without authentication. Socket ID: ${socket.id}. This should not happen if auth middleware is working correctly.`);
+  }
+
+  socket.on('message history', async () => {
+    if (!socket.user) { // Ensure user is authenticated
+      logger.error('Attempted to get message history without authenticated user.');
+      return;
+    }
+    try {
+      const messages = await Message.find({ receiver: 'all' }).sort({ timestamp: 1 });
+      socket.emit('message history', messages);
+    } catch (error) {
+      logger.error('Error fetching message history:', error);
+    }
   });
 
-  socket.on('private message', ({ to, message }) => {
-    const senderUsername = socket.user.username; // Get sender from authenticated socket
-    const messageData = { sender: senderUsername, message, timestamp: new Date() };
-
-    // Store message for sender
-    const senderUser = users.find(u => u.username === senderUsername);
-    if (senderUser) {
-      if (!senderUser.privateMessages[to]) {
-        senderUser.privateMessages[to] = [];
-      }
-      senderUser.privateMessages[to].push(messageData);
+  socket.on('chat message', async (msg) => {
+    if (!socket.user) { // Ensure user is authenticated
+      logger.error('Attempted to send chat message without authenticated user.');
+      return;
     }
+    const message = new Message({ sender: socket.user._id, message: msg });
+    await message.save();
+    const populatedMessage = await Message.findById(message._id).populate('sender', 'username');
+    io.emit('chat message', { username: populatedMessage.sender.username, message: populatedMessage.message });
+  });
 
-    // Store message for receiver
-    const receiverUser = users.find(u => u.username === to);
-    if (receiverUser) {
-      if (!receiverUser.privateMessages[senderUsername]) {
-        receiverUser.privateMessages[senderUsername] = [];
-      }
-      receiverUser.privateMessages[senderUsername].push(messageData);
+  socket.on('get private messages', async ({ withUser }) => {
+    if (!socket.user) { // Ensure user is authenticated
+      logger.error('Attempted to get private messages without authenticated user.');
+      return;
     }
+    try {
+      logger.info(`Getting private messages for ${socket.user.username} with ${withUser}`);
+      const withUserDoc = await User.findOne({ username: withUser });
+      if (!withUserDoc) {
+        return logger.error(`User ${withUser} not found`);
+      }
+      const messages = await Message.find({
+        $or: [
+          { sender: socket.user._id, recipient: withUserDoc._id },
+          { sender: withUserDoc._id, recipient: socket.user._id },
+        ],
+      }).sort({ timestamp: 1 }).populate('sender', 'username');
+      logger.info(`Found ${messages.length} messages`);
+      socket.emit('private messages', messages);
+    } catch (error) {
+      logger.error('Error fetching private messages:', error);
+    }
+  });
 
-    // Emit message to recipient if connected
-    const receiverSocketId = Object.keys(connectedUsers).find(key => connectedUsers[key] === to);
+  socket.on('typing', ({ to }) => {
+    const receiverSocketId = connectedUsers[to];
     if (receiverSocketId) {
-      io.to(receiverSocketId).emit('private message', { from: senderUsername, message: messageData });
+      io.to(receiverSocketId).emit('typing', { from: socket.user.username });
     }
-    // Also emit to sender for immediate display
-    socket.emit('private message', { from: senderUsername, message: messageData });
-
-    console.log(`Private message from ${senderUsername} to ${to}: ${message}`);
   });
 
-  socket.on('get private messages', ({ withUser }) => {
-    const currentUser = socket.user.username;
-    const user = users.find(u => u.username === currentUser);
-    if (user && user.privateMessages[withUser]) {
-      socket.emit('private messages', user.privateMessages[withUser]);
+  socket.on('stop typing', ({ to }) => {
+    const receiverSocketId = connectedUsers[to];
+    if (receiverSocketId) {
+      io.to(receiverSocketId).emit('stop typing', { from: socket.user.username });
+    }
+  });
+
+  socket.on('mark messages as read', async ({ withUser }) => {
+    if (!socket.user) {
+        logger.error('Attempted to mark messages as read without authenticated user.');
+        return;
+    }
+    try {
+        const withUserDoc = await User.findOne({ username: withUser });
+        if (!withUserDoc) {
+          return logger.error(`User ${withUser} not found`);
+        }
+        await Message.updateMany(
+            { sender: withUserDoc._id, recipient: socket.user._id, isRead: false },
+            { $set: { isRead: true } }
+        );
+        const senderSocketId = connectedUsers[withUser];
+        if (senderSocketId) {
+            io.to(senderSocketId).emit('messages marked as read', { byUser: socket.user.username });
+        }
+    } catch (error) {
+        logger.error('Error marking messages as read:', error);
+    }
+  });
+
+  socket.on('private message', async (data) => {
+    logger.info(`[Private Message] Received from ${socket.user.username}: ${JSON.stringify(data)}`);
+    if (!socket.user) { // Ensure user is authenticated
+      logger.error('[Private Message] Attempted to send private message without authenticated user.');
+      return;
+    }
+    const { to, message, isVoice, voiceData } = data;
+    const recipientUser = await User.findOne({ username: to });
+    if (!recipientUser) {
+      logger.error(`[Private Message] Recipient user ${to} not found.`);
+      return;
+    }
+    logger.info(`[Private Message] Recipient user found: ${recipientUser.username}`);
+
+    const newMessage = new Message({
+      sender: socket.user._id,
+      recipient: recipientUser._id,
+      message,
+      isVoice,
+      voiceData,
+    });
+    await newMessage.save();
+    const populatedMessage = await Message.findById(newMessage._id).populate('sender', 'username');
+    logger.info(`[Private Message] Message saved and populated: ${JSON.stringify(populatedMessage)}`);
+
+    const receiverSocketId = connectedUsers[recipientUser.username];
+    if (receiverSocketId) {
+      logger.info(`[Private Message] Recipient ${recipientUser.username} is online. Emitting to socket ID: ${receiverSocketId}`);
+      io.to(receiverSocketId).emit('private message', { message: populatedMessage });
     } else {
-      socket.emit('private messages', []);
+      logger.info(`[Private Message] Recipient ${recipientUser.username} is offline. Message saved, but not emitted in real-time.`);
     }
-  });
-
-  socket.on('chat message', (msg) => {
-    const username = connectedUsers[socket.id] || 'Anonymous';
-    const messageData = { username, message: msg, timestamp: new Date() };
-    messages.push(messageData);
-    // Keep message history to a reasonable size, e.g., last 100 messages
-    if (messages.length > 100) {
-      messages.shift();
-    }
-    io.emit('chat message', messageData);
-    console.log(`${username}: ${msg}`);
   });
 
   socket.on('disconnect', () => {
-    const username = connectedUsers[socket.id];
-    if (username) {
-      delete connectedUsers[socket.id];
-      io.emit('user left', username);
-      console.log(`${username} left the chat`);
+    if (socket.user && socket.user.username) {
+      delete connectedUsers[socket.user.username];
+      logger.info(`[Connected Users] User ${socket.user.username} disconnected. connectedUsers: ${JSON.stringify(connectedUsers)}`);
+      io.emit('user left', socket.user.username);
     }
-    console.log('user disconnected');
+    logger.info('user disconnected');
   });
 });
 
-server.listen(3000, () => {
-  console.log('listening on *:3000');
-});
+const PORT = process.env.PORT || 3000;
+
+async function startServer() {
+  await connectDB();
+  server.listen(PORT, () => {
+    logger.info(`Server running on port ${PORT}`);
+  });
+}
+
+startServer();

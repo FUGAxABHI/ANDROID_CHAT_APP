@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/auth_service.dart';
-import 'dart:convert'; // Import for json, utf8, base64Url
+import 'dart:convert';
+import 'package:frontend/friends_list_screen.dart';
+import 'package:frontend/user_profile_screen.dart';
+import 'package:frontend/chats_view.dart';
+import 'package:frontend/friends_view.dart';
+import 'package:frontend/profile_view.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -9,14 +14,16 @@ class DashboardScreen extends StatefulWidget {
   State<DashboardScreen> createState() => _DashboardScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _DashboardScreenState extends State<DashboardScreen> with SingleTickerProviderStateMixin {
   String? _username;
   final AuthService _authService = AuthService();
+  late TabController _tabController;
 
   @override
   void initState() {
     super.initState();
     _loadUsername();
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   Future<void> _loadUsername() async {
@@ -33,83 +40,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
         });
       } catch (e) {
         print('Error decoding token: $e');
-        // Optionally, log out or redirect to login if token is invalid
       }
     }
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Chat App'),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () => Navigator.pushNamed(context, '/search_users'),
+          ),
           IconButton(
             icon: const Icon(Icons.logout),
             onPressed: () async {
-              await AuthService().logout();
-              Navigator.pushReplacementNamed(context, '/login'); // Go back to login
+              await _authService.logout();
+              Navigator.pushReplacementNamed(context, '/login');
             },
           ),
         ],
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Welcome to the Dashboard!',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 40),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, '/friends_list');
-              },
-              icon: const Icon(Icons.people),
-              label: const Text('Friends & Messages'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.pushNamed(context, '/search_users');
-              },
-              icon: const Icon(Icons.search),
-              label: const Text('Search Users'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () {
-                if (_username != null) {
-                  Navigator.pushNamed(
-                    context,
-                    '/user_profile',
-                    arguments: {'username': _username!},
-                  );
-                } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Username not available. Please log in again.')),
-                  );
-                }
-              },
-              icon: const Icon(Icons.person),
-              label: const Text('My Profile'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
-            ),
+        bottom: TabBar(
+          controller: _tabController,
+          tabs: const [
+            Tab(icon: Icon(Icons.chat), text: 'Chats'),
+            Tab(icon: Icon(Icons.people), text: 'Friends'),
+            Tab(icon: Icon(Icons.person), text: 'Profile'),
           ],
         ),
       ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          const ChatsView(),
+          const FriendsView(),
+          _username != null ? ProfileView(username: _username!) : const Center(child: CircularProgressIndicator()),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChatsView() {
+    // Placeholder for chats view
+    return const Center(
+      child: Text('Recent chats will be displayed here.', style: TextStyle(color: Colors.white)),
     );
   }
 }

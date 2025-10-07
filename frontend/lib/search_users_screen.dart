@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:frontend/auth_service.dart'; // Import AuthService
 import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
+
+final log = Logger('SearchUsersScreen');
 
 class SearchUsersScreen extends StatefulWidget {
   const SearchUsersScreen({super.key});
@@ -31,23 +34,19 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
 
     try {
       final response = await http.get(
-        Uri.parse('http://localhost:3000/api/users/search?q=$query'),
+        Uri.parse('http://localhost:3000/api/users/search?query=$query'),
       );
 
       if (response.statusCode == 200) {
         final List<dynamic> data = json.decode(response.body);
         setState(() {
-          _searchResults = data.cast<String>();
+          _searchResults = data.map((user) => user['username'] as String).toList();
         });
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error searching users: ${response.statusCode}')),
-        );
+        log.warning('Error searching users: ${response.statusCode}');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to connect to server: $e')),
-      );
+      log.severe('Failed to connect to server: $e');
     } finally {
       setState(() {
         _isLoading = false;
@@ -58,9 +57,7 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
   Future<void> _sendFriendRequest(String receiverUsername) async {
     final token = await _authService.getToken();
     if (token == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('You must be logged in to send friend requests.')),
-      );
+      log.info('You must be logged in to send friend requests.');
       return;
     }
 
@@ -76,18 +73,12 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
 
       final responseBody = json.decode(response.body);
       if (response.statusCode == 200) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(responseBody['message'])),
-        );
+        log.info(responseBody['message']);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to send friend request: ${responseBody['message']}')),
-        );
+        log.warning('Failed to send friend request: ${responseBody['message']}');
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error sending friend request: $e')),
-      );
+      log.severe('Error sending friend request: $e');
     }
   }
 
@@ -125,15 +116,33 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
                         final username = _searchResults[index];
                         return ListTile(
                           title: Text(username),
-                          trailing: IconButton(
-                            icon: const Icon(Icons.person_add),
-                            onPressed: () {
-                              _sendFriendRequest(username);
-                            },
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              IconButton(
+                                icon: const Icon(Icons.person_add),
+                                onPressed: () {
+                                  _sendFriendRequest(username);
+                                },
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.message),
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    '/private_chat',
+                                    arguments: {'friendUsername': username},
+                                  );
+                                },
+                              ),
+                            ],
                           ),
                           onTap: () {
-                            // TODO: Navigate to user profile
-                            print('View profile: $username');
+                            Navigator.pushNamed(
+                              context,
+                              '/user_profile',
+                              arguments: {'username': username},
+                            );
                           },
                         );
                       },

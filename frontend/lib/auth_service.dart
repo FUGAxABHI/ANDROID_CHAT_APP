@@ -1,9 +1,23 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:http/http.dart' as http;
+import 'package:frontend/socket_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class AuthService {
-  final String baseUrl = 'http://localhost:3000'; // Replace with your backend URL
+final log = Logger('AuthService');
+
+class AuthService with ChangeNotifier {
+  final String baseUrl = 'http://localhost:3000/api/auth';
+  String? _token;
+
+  String? get token => _token;
+
+  Future<void> init() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    _token = prefs.getString('jwt_token');
+    notifyListeners();
+  }
 
   Future<bool> register(String username, String password) async {
     final response = await http.post(
@@ -15,7 +29,7 @@ class AuthService {
     if (response.statusCode == 201) {
       return true;
     } else {
-      print('Registration failed: ${response.body}');
+      log.warning('Registration failed: ${response.body}');
       return false;
     }
   }
@@ -29,19 +43,24 @@ class AuthService {
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
-      final String token = responseData['token'];
+      _token = responseData['token'];
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString('jwt_token', token);
-      return token;
+      await prefs.setString('jwt_token', _token!);
+      SocketService().init(_token!); // Initialize SocketService with the new token
+      notifyListeners();
+      return _token;
     } else {
-      print('Login failed: ${response.body}');
+      log.warning('Login failed: ${response.body}');
       return null;
     }
   }
 
   Future<void> logout() async {
+    _token = null;
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.remove('jwt_token');
+    notifyListeners();
+    SocketService().init(null); // Reset SocketService on logout
   }
 
   Future<String?> getToken() async {
