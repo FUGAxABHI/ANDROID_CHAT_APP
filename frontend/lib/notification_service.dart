@@ -15,11 +15,12 @@ class NotificationService {
 
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onSelectNotification: (String? payload) async {
-        if (payload != null) {
+            onDidReceiveNotificationResponse:
+          (NotificationResponse response) async {
+        if (response.payload != null) {
           navigatorKey.currentState?.pushNamed(
             '/private_chat',
-            arguments: {'friendUsername': payload},
+            arguments: {'friendUsername': response.payload},
           );
         }
       },

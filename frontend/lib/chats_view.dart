@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/auth_service.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:frontend/chat_service.dart';
+import 'package:frontend/socket_service.dart';
+import 'package:provider/provider.dart';
 
 class ChatsView extends StatefulWidget {
   const ChatsView({super.key});
@@ -11,89 +13,98 @@ class ChatsView extends StatefulWidget {
 }
 
 class _ChatsViewState extends State<ChatsView> {
-  final AuthService _authService = AuthService();
-  List<dynamic> _recentChats = [];
+  late Future<List<dynamic>> _recentChatsFuture;
+  StreamSubscription? _messageSubscription;
 
   @override
   void initState() {
     super.initState();
-    _fetchRecentChats();
+    _recentChatsFuture = _fetchRecentChats();
+
+    // Listen for incoming messages to refresh the chat list
+    _messageSubscription = SocketService().messageStream.listen((_) {
+      // When a new message comes in, refresh the recent chats.
+      // A delay is added to avoid excessive refreshes during initial message load.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        if (mounted) {
+          setState(() {
+            _recentChatsFuture = _fetchRecentChats();
+          });
+        }
+      });
+    });
   }
 
-  Future<void> _fetchRecentChats() async {
-    final token = await _authService.getToken();
-    if (token == null) return;
-
-    try {
-      final parts = token.split('.');
-      if (parts.length != 3) throw Exception('Invalid token');
-      final payload = json.decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
-      final userId = payload['id'];
-
-      final response = await http.get(Uri.parse('http://localhost:3000/api/users/recent-chats/$userId'));
-
-      if (response.statusCode == 200) {
-        setState(() {
-          _recentChats = json.decode(response.body);
-        });
-      } else {
-        // Handle error
-      }
-    } catch (e) {
-      // Handle error
-    }
+  @override
+  void dispose() {
+    _messageSubscription?.cancel();
+    super.dispose();
   }
 
-  Future<void> _markAsRead(String sender) async {
-    final token = await _authService.getToken();
-    if (token == null) return;
+  Future<List<dynamic>> _fetchRecentChats() {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    final chatService = Provider.of<ChatService>(context, listen: false);
+    final userId = authService.currentUser?.id;
 
-    try {
-      final parts = token.split('.');
-      if (parts.length != 3) throw Exception('Invalid token');
-      final payload = json.decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
-      final receiver = payload['username'];
-
-      await http.post(
-        Uri.parse('http://localhost:3000/api/chat/markAsRead'),
-        headers: {'Content-Type': 'application/json'},
-        body: json.encode({'sender': sender, 'receiver': receiver}),
-      );
-    } catch (e) {
-      // Handle error
+    if (userId != null) {
+      return chatService.getRecentChats(userId);
+    } else {
+      // Return an empty future if there's no user ID
+      return Future.value([]);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: _recentChats.length,
-      itemBuilder: (context, index) {
-        final chat = _recentChats[index];
-        return ListTile(
-          leading: CircleAvatar(
-            child: Text(chat['username'][0].toUpperCase()),
-          ),
-          title: Text(chat['username']),
-          subtitle: Text(chat['lastMessage']['message'] ?? 'Voice Message'),
-          trailing: chat['unreadCount'] > 0
-              ? CircleAvatar(
-                  radius: 10,
-                  backgroundColor: Colors.red,
-                  child: Text(
-                    chat['unreadCount'].toString(),
-                    style: const TextStyle(color: Colors.white, fontSize: 12),
-                  ),
-                )
-              : null,
-          onTap: () async {
-            await _markAsRead(chat['username']);
-            await Navigator.pushNamed(
-              context,
-              '/private_chat',
-              arguments: {'friendUsername': chat['username']},
+    return FutureBuilder<List<dynamic>>(
+      future: _recentChatsFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (snapshot.hasError) {
+          return const Center(child: Text('Error loading chats.'));
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return const Center(child: Text('No recent chats.'));
+        }
+
+        final recentChats = snapshot.data!;
+
+        return ListView.builder(
+          itemCount: recentChats.length,
+          itemBuilder: (context, index) {
+            final chat = recentChats[index];
+            final unreadCount = chat['unreadCount'] ?? 0;
+
+            return ListTile(
+              leading: CircleAvatar(
+                child: Text(chat['username'][0].toUpperCase()),
+              ),
+              title: Text(chat['username']),
+              subtitle: Text(chat['lastMessage']?['message'] ?? 'Media message'),
+              trailing: unreadCount > 0
+                  ? CircleAvatar(
+                      radius: 10,
+                      backgroundColor: Colors.red,
+                      child: Text(
+                        unreadCount.toString(),
+                        style: const TextStyle(color: Colors.white, fontSize: 12),
+                      ),
+                    )
+                  : null,
+              onTap: () async {
+                await Navigator.pushNamed(
+                  context,
+                  '/private_chat',
+                  arguments: {'friendUsername': chat['username']},
+                );
+                // After returning from a chat, refresh the list
+                setState(() {
+                  _recentChatsFuture = _fetchRecentChats();
+                });
+              },
             );
-            _fetchRecentChats();
           },
         );
       },

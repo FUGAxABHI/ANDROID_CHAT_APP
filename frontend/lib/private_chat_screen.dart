@@ -1,10 +1,17 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
-import 'package:frontend/providers/chat_provider.dart';
-import 'package:provider/provider.dart';
-import 'package:logging/logging.dart';
-import 'package:frontend/auth_service.dart';
 import 'dart:convert';
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:frontend/auth_service.dart';
+import 'package:frontend/providers/chat_provider.dart';
+import 'package:frontend/stylish_message_bubble.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:logging/logging.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:record/record.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final log = Logger('PrivateChatScreen');
 
@@ -21,54 +28,25 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
   String? _currentUsername;
-  Timer? _typingTimer;
+
+  // Voice Recording State
+  final AudioRecorder _audioRecorder = AudioRecorder();
+  bool _isRecording = false;
 
   @override
   void initState() {
     super.initState();
-    _getCurrentUsername();
+    _currentUsername = Provider.of<AuthService>(context, listen: false).token; // Simplified
+
     final chatProvider = Provider.of<ChatProvider>(context, listen: false);
     chatProvider.init(widget.friendUsername);
-
-    _messageController.addListener(() {
-      if (_messageController.text.isNotEmpty) {
-        chatProvider.sendTyping();
-        _typingTimer?.cancel();
-        _typingTimer = Timer(const Duration(seconds: 2), () {
-          chatProvider.sendStopTyping();
-        });
-      } else {
-        chatProvider.sendStopTyping();
-      }
-    });
-  }
-
-  void _getCurrentUsername() async {
-    final token = await AuthService().getToken();
-    if (token != null) {
-      try {
-        final parts = token.split('.');
-        if (parts.length != 3) {
-          throw Exception('Invalid token');
-        }
-        final payload = json.decode(utf8.decode(base64Url.decode(base64Url.normalize(parts[1]))));
-        if (mounted) {
-          setState(() {
-            _currentUsername = payload['username'];
-          });
-        }
-      } catch (e) {
-        log.severe('Error decoding token: $e');
-      }
-    }
   }
 
   @override
   void dispose() {
     _messageController.dispose();
     _scrollController.dispose();
-    _typingTimer?.cancel();
-    // The ChatProvider's dispose is handled by the Provider package
+    _audioRecorder.dispose();
     super.dispose();
   }
 
@@ -92,50 +70,68 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
     });
   }
 
+  Future<void> _startRecording() async {
+    if (await _audioRecorder.hasPermission()) {
+      final dir = await getTemporaryDirectory();
+      final path = '${dir.path}/recording.m4a';
+      await _audioRecorder.start(const RecordConfig(), path: path);
+      setState(() {
+        _isRecording = true;
+      });
+    }
+  }
+
+  Future<void> _stopRecording(ChatProvider chatProvider) async {
+    final path = await _audioRecorder.stop();
+    setState(() {
+      _isRecording = false;
+    });
+
+    if (path != null) {
+      final file = File(path);
+      final bytes = await file.readAsBytes();
+      chatProvider.sendVoiceMessage(bytes);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_currentUsername == null) {
+      return const Scaffold(
+        body: Center(child: Text('Error: Not authenticated.')),
+      );
+    }
+
     return Consumer<ChatProvider>(
       builder: (context, chatProvider, child) {
-        // Scroll to bottom when new messages arrive
         if (chatProvider.messages.isNotEmpty) {
           _scrollToBottom();
         }
-        chatProvider.markMessagesAsRead(); // Mark messages as read when the chat is visible
+
         return Scaffold(
           appBar: AppBar(
-            title: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(widget.friendUsername),
-                if (chatProvider.onlineUsers.contains(widget.friendUsername))
-                  const Text(
-                    'Online',
-                    style: TextStyle(fontSize: 12, color: Colors.greenAccent),
-                  ),
-              ],
-            ),
+            title: Text(widget.friendUsername),
           ),
           body: Column(
             children: [
               Expanded(
-                child: ListView.builder(
-                  controller: _scrollController,
-                  itemCount: chatProvider.messages.length,
-                  itemBuilder: (context, index) {
-                    final message = chatProvider.messages[index];
-                    final isMe = message['sender']['username'] == _currentUsername;
-                    return MessageBubble(
-                      message: message,
-                      isMe: isMe,
-                    );
-                  },
-                ),
+                child: chatProvider.isLoading
+                    ? const Center(child: CircularProgressIndicator())
+                    : chatProvider.error != null
+                        ? Center(child: Text('Error: ${chatProvider.error}'))
+                        : ListView.builder(
+                            controller: _scrollController,
+                            itemCount: chatProvider.messages.length,
+                            itemBuilder: (context, index) {
+                              final message = chatProvider.messages[index];
+                              final isMe = message['sender']?['username'] != widget.friendUsername;
+                              return StylishMessageBubble(
+                                message: message,
+                                isMe: isMe,
+                              );
+                            },
+                          ),
               ),
-              if (chatProvider.isTyping)
-                const Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text('typing...'),
-                ),
               _buildMessageInputField(chatProvider),
             ],
           ),
@@ -149,6 +145,10 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
       padding: const EdgeInsets.all(8.0),
       child: Row(
         children: [
+          IconButton(
+            icon: const Icon(Icons.attach_file),
+            onPressed: () => chatProvider.sendFile(),
+          ),
           Expanded(
             child: TextField(
               controller: _messageController,
@@ -162,56 +162,12 @@ class _PrivateChatScreenState extends State<PrivateChatScreen> {
             icon: const Icon(Icons.send),
             onPressed: () => _sendMessage(chatProvider),
           ),
+          GestureDetector(
+            onLongPressStart: (_) => _startRecording(),
+            onLongPressEnd: (_) => _stopRecording(chatProvider),
+            child: Icon(_isRecording ? Icons.mic_off : Icons.mic),
+          ),
         ],
-      ),
-    );
-  }
-}
-
-class MessageBubble extends StatelessWidget {
-  final dynamic message;
-  final bool isMe;
-
-  const MessageBubble({super.key, required this.message, required this.isMe});
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
-      child: Container(
-        margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-        padding: const EdgeInsets.all(12),
-        decoration: BoxDecoration(
-          color: isMe ? Theme.of(context).colorScheme.primary : Theme.of(context).colorScheme.secondary,
-          borderRadius: BorderRadius.circular(16),
-        ),
-        child: Column(
-          crossAxisAlignment: isMe ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-          children: [
-            Text(
-              message['message'],
-              style: const TextStyle(color: Colors.white),
-            ),
-            const SizedBox(height: 4),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  '${DateTime.parse(message['timestamp']).hour}:${DateTime.parse(message['timestamp']).minute}',
-                  style: const TextStyle(color: Colors.white70, fontSize: 10),
-                ),
-                if (isMe) ...[
-                  const SizedBox(width: 4),
-                  Icon(
-                    message['isRead'] ? Icons.done_all : Icons.done,
-                    color: message['isRead'] ? Colors.blueAccent : Colors.white70,
-                    size: 16,
-                  ),
-                ],
-              ],
-            ),
-          ],
-        ),
       ),
     );
   }

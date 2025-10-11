@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/providers/friends_provider.dart';
+import 'package:provider/provider.dart';
 
 class FriendsListScreen extends StatefulWidget {
   const FriendsListScreen({super.key});
@@ -8,63 +10,69 @@ class FriendsListScreen extends StatefulWidget {
 }
 
 class _FriendsListScreenState extends State<FriendsListScreen> {
-  // Placeholder for friends list. In a real app, this would come from backend.
-  final List<String> _friends = ['user1', 'user2', 'testuser'];
+  @override
+  void initState() {
+    super.initState();
+    Provider.of<FriendsProvider>(context, listen: false).getFriends();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Friends List'),
-      ),
-      body: Container(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Colors.blue.shade800, Colors.purple.shade800],
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.person_add_alt_1),
+            onPressed: () {
+              Navigator.pushNamed(context, '/friend_requests');
+            },
           ),
-        ),
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: TextField(
-                decoration: InputDecoration(
-                  hintText: 'Search Friends...',
-                  prefixIcon: const Icon(Icons.search, color: Colors.white),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(20),
+        ],
+      ),
+      body: Consumer<FriendsProvider>(
+        builder: (context, friendsProvider, child) {
+          if (friendsProvider.isLoadingFriends) {
+            return const Center(child: CircularProgressIndicator());
+          }
+
+          if (friendsProvider.friendsError != null) {
+            return Center(child: Text('Error: ${friendsProvider.friendsError}'));
+          }
+
+          if (friendsProvider.friends.isEmpty) {
+            return const Center(child: Text('No friends yet'));
+          }
+
+          return Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.blue.shade800, Colors.purple.shade800],
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+            child: ListView.builder(
+              itemCount: friendsProvider.friends.length,
+              itemBuilder: (context, index) {
+                final friend = friendsProvider.friends[index];
+                return ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: NetworkImage(friend.avatar),
                   ),
-                  filled: true,
-                  fillColor: Colors.white.withOpacity(0.1),
-                ),
-              ),
+                  title: Text(friend.username, style: const TextStyle(color: Colors.white)),
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      '/user_profile',
+                      arguments: {'userId': friend.id},
+                    );
+                  },
+                );
+              },
             ),
-            Expanded(
-              child: ListView.builder(
-                itemCount: _friends.length,
-                itemBuilder: (context, index) {
-                  final friendUsername = _friends[index];
-                  return ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.white,
-                      child: Text(friendUsername[0].toUpperCase(), style: const TextStyle(fontWeight: FontWeight.bold)),
-                    ),
-                    title: Text(friendUsername, style: const TextStyle(color: Colors.white)),
-                    onTap: () {
-                      Navigator.pushNamed(
-                        context,
-                        '/user_profile',
-                        arguments: {'username': friendUsername},
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          ],
-        ),
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

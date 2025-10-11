@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:frontend/auth_service.dart';
 import 'dart:convert';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:provider/provider.dart';
 
 final log = Logger('ChatScreen');
 
@@ -26,7 +27,7 @@ class _ChatScreenState extends State<ChatScreen> {
   }
 
   void _connectSocket() async {
-    final AuthService authService = AuthService();
+    final authService = Provider.of<AuthService>(context, listen: false);
     final token = await authService.getToken();
 
     if (token == null) {
@@ -47,7 +48,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     }
 
-    socket = IO.io('http://localhost:3000', <String, dynamic>{
+    socket = IO.io('http://51.75.118.79:20167', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
       'extraHeaders': {'x-auth-token': token},
@@ -92,49 +93,48 @@ class _ChatScreenState extends State<ChatScreen> {
     socket.onDisconnect((_) => log.info('Disconnected from socket'));
     socket.onError((data) {
       log.severe('Socket Error: $data');
-      if (data.toString().contains('Authentication error: Invalid token.')) {
-        AuthService().logout();
-        Navigator.pushReplacementNamed(context, '/login');
-      }
-    });
-  }
-
-  void _sendMessage() {
-    if (_messageController.text.isNotEmpty) {
-      socket.emit('chat message', _messageController.text);
-      _messageController.clear();
-    }
-  }
-
-  @override
-  void dispose() {
-    socket.disconnect();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Chat as ${_username ?? 'Guest'}'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () {
-              Navigator.pushNamed(context, '/profile_settings');
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.logout),
-            onPressed: () async {
-              await AuthService().logout();
+            if (data.toString().contains('Authentication error: Invalid token.')) {
+              Provider.of<AuthService>(context, listen: false).logout();
               Navigator.pushReplacementNamed(context, '/login');
-            },
-          ),
-        ],
-      ),
-      body: Column(
-        children: <Widget>[
+            }
+          });
+        }
+      
+        void _sendMessage() {
+          if (_messageController.text.isNotEmpty) {
+            socket.emit('chat message', _messageController.text);
+            _messageController.clear();
+          }
+        }
+      
+        @override
+        void dispose() {
+          socket.disconnect();
+          super.dispose();
+        }
+      
+        @override
+        Widget build(BuildContext context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Chat as ${_username ?? 'Guest'}'),
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.settings),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/profile_settings');
+                  },
+                ),
+                IconButton(
+                  icon: const Icon(Icons.logout),
+                  onPressed: () async {
+                    Provider.of<AuthService>(context, listen: false).logout();
+                    Navigator.pushReplacementNamed(context, '/login');
+                  },
+                ),
+              ],
+            ),
+            body: Column(        children: <Widget>[
           Expanded(
             child: ListView.builder(
               itemCount: _messages.length,

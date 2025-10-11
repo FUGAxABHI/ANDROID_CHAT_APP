@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -11,10 +12,10 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final AuthService _authService = AuthService();
   bool _isLoggingIn = false;
 
   void _login() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
     setState(() {
       _isLoggingIn = true;
     });
@@ -22,7 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
 
-    final String? token = await _authService.login(username, password);
+    final String? token = await authService.login(username, password);
 
     if (token != null) {
       print('Login successful! Token: $token');

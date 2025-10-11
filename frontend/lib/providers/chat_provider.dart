@@ -1,140 +1,220 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:frontend/auth_service.dart';
+import 'package:frontend/auth_service.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:logging/logging.dart';
 import 'package:frontend/socket_service.dart';
+import 'package:frontend/user_service.dart';
 
 // Assuming Message and User models are defined somewhere, for now using Map<String, dynamic>
 // import 'package:frontend/models/message.dart';
 // import 'package:frontend/models/user.dart';
 
+import 'package:frontend/api_service.dart';
+import 'package:file_picker/file_picker.dart';
+
 class ChatProvider with ChangeNotifier {
   final log = Logger('ChatProvider');
-  final AuthService _authService = AuthService();
+  final SocketService _socketService = SocketService();
+  final ApiService _apiService;
+  final AuthService _authService;
+  final UserService _userService;
+
+  ChatProvider(this._apiService, this._authService, this._userService);
+  StreamSubscription? _messageSubscription;
+  StreamSubscription? _readStatusSubscription;
+  StreamSubscription? _historySubscription;
 
   List<dynamic> _messages = [];
   bool _isTyping = false;
   Set<String> _onlineUsers = {};
   String? _currentChatPartner;
+  String? _chatPartnerId;
+  bool _isLoading = false;
+  String? _error;
 
   List<dynamic> get messages => _messages;
   bool get isTyping => _isTyping;
   Set<String> get onlineUsers => _onlineUsers;
+  bool get isLoading => _isLoading;
+  String? get error => _error;
 
-  void init(String chatPartner) {
+  Future<void> init(String chatPartner) async {
+    log.info('Initializing ChatProvider for: $chatPartner');
     _messages = [];
     _currentChatPartner = chatPartner;
-    _connectSocket();
-  }
+    _isLoading = true;
+    _error = null;
+    log.info('ChatProvider: Setting _isLoading to true in init.');
+    // Delay notification to avoid calling it during build
+    Future.delayed(Duration.zero, () => notifyListeners());
 
-  void _connectSocket() {
-    final IO.Socket? socket = SocketService().socket;
-    if (socket == null || !socket.connected) {
-      log.warning('ChatProvider: SocketService socket not connected, cannot set up listeners.');
+    // Fetch chat partner's ID
+    final partnerUser = await _userService.getUserByUsername(chatPartner);
+    _chatPartnerId = partnerUser?.id;
+    if (_chatPartnerId == null) {
+      log.severe('ChatProvider: Could not find chat partner ID for username: $chatPartner');
+      _error = 'Could not find chat partner.';
+      _isLoading = false;
+      notifyListeners();
       return;
     }
-    log.info('ChatProvider: Setting up listeners for chat partner: $_currentChatPartner');
 
-    // Clear previous listeners to prevent duplicates
-    socket.off('private messages');
-    socket.off('private message');
-    socket.off('typing');
-    socket.off('stop typing');
-    socket.off('messages marked as read');
-    socket.off('user online');
-    socket.off('user offline');
+    // Clean up any previous subscriptions
+    _messageSubscription?.cancel();
+    _readStatusSubscription?.cancel();
+    _historySubscription?.cancel();
 
-    socket.on('private messages', (data) {
-      log.info('ChatProvider: Received private messages history: $data');
-      _messages = List<dynamic>.from(data); // Assign a new list instance
+    _historySubscription = _socketService.historyStream.listen((history) {
+      log.info('Received message history with ${history.length} messages.');
+      _messages = history;
+      _messages.sort((a, b) => DateTime.parse(a['timestamp']).compareTo(DateTime.parse(b['timestamp'])));
+      _isLoading = false;
       notifyListeners();
     });
 
-    socket.on('private message', (data) {
-      log.info('ChatProvider: Received real-time private message: $data');
-      _messages.add(data['message']);
+    // Listen to the global message stream for real-time updates
+    _messageSubscription = _socketService.messageStream.listen((message) {
+      log.info('ChatProvider: Received message from stream: $message');
+      // Check if the message belongs to the current chat
+      final senderData = message['sender'];
+      String? sender;
+      if (senderData is Map) {
+        sender = senderData['username'];
+      }
+
+      final recipient = message['recipient']; // Recipient is an ID string
+
+      // This logic needs to be robust. For now, we check if the sender or recipient matches
+      // the chat partner. This is a simplified example.
+      final currentUserId = _authService.currentUser?.id; // Assuming currentUser has an ID
+
+      if (currentUserId == null || _chatPartnerId == null) {
+        log.warning('ChatProvider: currentUserId or _chatPartnerId is null. Cannot filter message.');
+        return;
+      }
+
+      if ((sender == _currentChatPartner && recipient == currentUserId) || // Message from chat partner to current user
+          (recipient == _chatPartnerId && sender == _authService.currentUser?.username)) { // Message from current user to chat partner
+         log.info('ChatProvider: Message is for current chat. Adding/updating message.');
+         _addOrUpdateMessage(message);
+      }
+    }, onError: (error) {
+      log.severe('Error on message stream: $error');
+      _error = 'Connection lost.';
+      _isLoading = false;
+      log.info('ChatProvider: Setting _isLoading to false on stream error.');
       notifyListeners();
     });
 
-    socket.on('typing', (data) {
-      if (data['from'] == _currentChatPartner) {
-        _isTyping = true;
-        notifyListeners();
-      }
-    });
+    _readStatusSubscription = _socketService.readStatusStream.listen((data) {
+      final byUser = data['byUser'];
+      final withUser = data['withUser']; // The user whose messages were read
 
-    socket.on('stop typing', (data) {
-      if (data['from'] == _currentChatPartner) {
-        _isTyping = false;
-        notifyListeners();
-      }
-    });
-
-    socket.on('messages marked as read', (data) {
-      if (data['byUser'] == _currentChatPartner) {
+      // Check if the read receipt is relevant for the current chat
+      if (byUser == _currentChatPartner && withUser == _authService.currentUser?.username) {
+        log.info('Received read receipt from $_currentChatPartner');
+        bool changed = false;
         for (var msg in _messages) {
-          msg['isRead'] = true;
+          // Mark messages sent by the current user as read
+          if (msg['sender']?['username'] == _authService.currentUser?.username && msg['isRead'] == false) {
+            msg['isRead'] = true;
+            changed = true;
+          }
         }
-        notifyListeners();
+        if (changed) {
+          log.info('Messages updated with read status. Notifying listeners.');
+          notifyListeners();
+        }
       }
     });
 
-    socket.on('user online', (userId) {
-      _onlineUsers.add(userId);
-      notifyListeners();
-    });
+    // Tell the socket service to fetch the history for this user
+    _socketService.getMessageHistory(chatPartner);
 
-    socket.on('user offline', (userId) {
-      _onlineUsers.remove(userId);
-      notifyListeners();
-    });
-
-    // Request private messages after listeners are set up
-    socket.emit('get private messages', {'withUser': _currentChatPartner});
+    // Mark messages as read
+    _socketService.markMessagesAsRead(chatPartner);
+    
+    // Set the active chat in the socket service to handle notifications correctly
+    _socketService.setActiveChat(chatPartner);
   }
 
-  void sendMessage(String message, {bool isVoice = false, String? voiceData}) {
-    final IO.Socket? socket = SocketService().socket;
-    if (socket == null || !socket.connected) {
-      log.warning('SocketService socket not connected, cannot send message.');
-      return;
+  void _addOrUpdateMessage(Map<String, dynamic> message) {
+    log.info('ChatProvider: _addOrUpdateMessage called for message ID: ${message['_id']}');
+    // Simple add for now. Optimistic UI can be improved here.
+    final existingIndex = _messages.indexWhere((m) => m['_id'] == message['_id']);
+    if (existingIndex == -1) {
+        _messages.add(message);
+        log.info('ChatProvider: Added new message. Total messages: ${_messages.length}');
+    } else {
+        _messages[existingIndex] = message;
+        log.info('ChatProvider: Updated existing message ID: ${message['_id']}');
     }
-    final messageData = {
-      'to': _currentChatPartner,
-      'message': message,
-      'isVoice': isVoice,
-      'voiceData': voiceData,
-    };
-    // Optimistically add the message to the sender's chat for immediate display
-    _messages.add({
-      'sender': {'username': 'You'}, // Placeholder for sender's username
-      'message': message,
-      'timestamp': DateTime.now().toIso8601String(),
-      'isRead': false,
-    });
+    _messages.sort((a, b) => DateTime.parse(a['timestamp']).compareTo(DateTime.parse(b['timestamp'])));
+    if (_isLoading) {
+      _isLoading = false;
+      log.info('ChatProvider: Setting _isLoading to false after processing message.');
+    }
     notifyListeners();
+    log.info('ChatProvider: notifyListeners called in _addOrUpdateMessage.');
+  }
 
-    socket.emit('private message', messageData);
+  void sendMessage(String message, {String? mediaUrl, String? mediaType}) {
+    if (_currentChatPartner == null) return;
+    log.info('ChatProvider: Sending message to $_currentChatPartner: $message');
+    _socketService.sendMessage(_currentChatPartner!, message, mediaUrl: mediaUrl, mediaType: mediaType);
+  }
+
+  void sendVoiceMessage(List<int> voiceData) {
+    if (_currentChatPartner == null) return;
+    _socketService.sendVoiceMessage(_currentChatPartner!, voiceData);
+  }
+
+  Future<void> sendFile() async {
+    final result = await FilePicker.platform.pickFiles();
+    if (result != null) {
+      final path = result.files.single.path;
+      if (path != null) {
+        try {
+          final response = await _apiService.uploadFile('/api/upload', path);
+          final url = response['url'];
+          // Determine media type based on file extension
+          final mediaType = _getMediaType(path);
+          _socketService.sendMessage(_currentChatPartner!, url, mediaType: mediaType);
+        } catch (e) {
+          log.severe('Failed to upload file: $e');
+        }
+      }
+    }
+  }
+
+  String _getMediaType(String path) {
+    final extension = path.split('.').last.toLowerCase();
+    if (['jpg', 'jpeg', 'png', 'gif'].contains(extension)) {
+      return 'image';
+    } else if (['mp4', 'mov', 'avi'].contains(extension)) {
+      return 'video';
+    } else {
+      return 'file';
+    }
   }
 
   void sendTyping() {
-    final IO.Socket? socket = SocketService().socket;
-    if (socket == null || !socket.connected) return;
-    socket.emit('typing', {'to': _currentChatPartner});
+    if (_currentChatPartner == null) return;
+    _socketService.sendTyping(_currentChatPartner!);
   }
 
   void sendStopTyping() {
-    final IO.Socket? socket = SocketService().socket;
-    if (socket == null || !socket.connected) return;
-    socket.emit('stop typing', {'to': _currentChatPartner});
+    if (_currentChatPartner == null) return;
+    _socketService.sendStopTyping(_currentChatPartner!);
   }
 
-  void markMessagesAsRead() {
-    final IO.Socket? socket = SocketService().socket;
-    if (socket == null || !socket.connected) return;
-    socket.emit('mark messages as read', {'withUser': _currentChatPartner});
+  @override
+  void dispose() {
+    log.info('Disposing ChatProvider for $_currentChatPartner');
+    _messageSubscription?.cancel();
+    _socketService.setActiveChat(null); // Clear active chat when leaving the screen
+    super.dispose();
   }
-
-
 }

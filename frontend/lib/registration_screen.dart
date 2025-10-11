@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/auth_service.dart';
+import 'package:provider/provider.dart';
 
 class RegistrationScreen extends StatefulWidget {
   const RegistrationScreen({super.key});
@@ -12,10 +13,10 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
-  final AuthService _authService = AuthService();
   bool _isRegistering = false;
 
   void _register() async {
+    final authService = Provider.of<AuthService>(context, listen: false);
     setState(() {
       _isRegistering = true;
     });
@@ -40,7 +41,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       return;
     }
 
-    final bool success = await _authService.register(username, password);
+    final bool success = await authService.register(username, password);
     print('Registration successful: $success');
 
     if (success) {

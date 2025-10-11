@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:logging/logging.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:frontend/auth_service.dart'; // Import AuthService
-import 'package:shared_preferences/shared_preferences.dart'; // Import SharedPreferences
-
-final log = Logger('SearchUsersScreen');
+import 'package:frontend/providers/friends_provider.dart';
+import 'package:frontend/user_service.dart';
+import 'package:frontend/models/user.dart';
+import 'package:provider/provider.dart';
 
 class SearchUsersScreen extends StatefulWidget {
   const SearchUsersScreen({super.key});
@@ -16,9 +13,9 @@ class SearchUsersScreen extends StatefulWidget {
 
 class _SearchUsersScreenState extends State<SearchUsersScreen> {
   final TextEditingController _searchController = TextEditingController();
-  List<String> _searchResults = [];
+  final UserService _userService = UserService();
+  List<User> _searchResults = [];
   bool _isLoading = false;
-  final AuthService _authService = AuthService(); // Instantiate AuthService
 
   Future<void> _performSearch(String query) async {
     if (query.isEmpty) {
@@ -33,20 +30,12 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
     });
 
     try {
-      final response = await http.get(
-        Uri.parse('http://localhost:3000/api/users/search?query=$query'),
-      );
-
-      if (response.statusCode == 200) {
-        final List<dynamic> data = json.decode(response.body);
-        setState(() {
-          _searchResults = data.map((user) => user['username'] as String).toList();
-        });
-      } else {
-        log.warning('Error searching users: ${response.statusCode}');
-      }
+      final results = await _userService.searchUsers(query);
+      setState(() {
+        _searchResults = results;
+      });
     } catch (e) {
-      log.severe('Failed to connect to server: $e');
+      // Handle error
     } finally {
       setState(() {
         _isLoading = false;
@@ -54,36 +43,10 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
     }
   }
 
-  Future<void> _sendFriendRequest(String receiverUsername) async {
-    final token = await _authService.getToken();
-    if (token == null) {
-      log.info('You must be logged in to send friend requests.');
-      return;
-    }
-
-    try {
-      final response = await http.post(
-        Uri.parse('http://localhost:3000/api/friends/request'),
-        headers: <String, String>{
-          'Content-Type': 'application/json',
-          'x-auth-token': token,
-        },
-        body: jsonEncode(<String, String>{'receiverUsername': receiverUsername}),
-      );
-
-      final responseBody = json.decode(response.body);
-      if (response.statusCode == 200) {
-        log.info(responseBody['message']);
-      } else {
-        log.warning('Failed to send friend request: ${responseBody['message']}');
-      }
-    } catch (e) {
-      log.severe('Error sending friend request: $e');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final friendsProvider = Provider.of<FriendsProvider>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Search Users'),
@@ -113,16 +76,19 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
                     child: ListView.builder(
                       itemCount: _searchResults.length,
                       itemBuilder: (context, index) {
-                        final username = _searchResults[index];
+                        final user = _searchResults[index];
                         return ListTile(
-                          title: Text(username),
+                          leading: CircleAvatar(
+                            backgroundImage: NetworkImage(user.avatar),
+                          ),
+                          title: Text(user.username),
                           trailing: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               IconButton(
                                 icon: const Icon(Icons.person_add),
                                 onPressed: () {
-                                  _sendFriendRequest(username);
+                                  friendsProvider.sendFriendRequest(user.username);
                                 },
                               ),
                               IconButton(
@@ -131,7 +97,7 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
                                   Navigator.pushNamed(
                                     context,
                                     '/private_chat',
-                                    arguments: {'friendUsername': username},
+                                    arguments: {'friendUsername': user.username},
                                   );
                                 },
                               ),
@@ -141,7 +107,7 @@ class _SearchUsersScreenState extends State<SearchUsersScreen> {
                             Navigator.pushNamed(
                               context,
                               '/user_profile',
-                              arguments: {'username': username},
+                              arguments: {'userId': user.id},
                             );
                           },
                         );
