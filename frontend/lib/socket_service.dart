@@ -33,19 +33,6 @@ class SocketService {
   // --- Public Methods ---
 
   void connect(String token) {
-    // Re-initialize controllers if they have been closed.
-    if (_messageController.isClosed) {
-      _messageController = StreamController.broadcast();
-    }
-    if (_friendRequestController.isClosed) {
-      _friendRequestController = StreamController.broadcast();
-    }
-    if (_readStatusController.isClosed) {
-      _readStatusController = StreamController.broadcast();
-    }
-    if (_historyController.isClosed) {
-      _historyController = StreamController.broadcast();
-    }
 
     // Disconnect any existing socket before creating a new one
     if (_socket != null && _socket!.connected) {
@@ -70,21 +57,11 @@ class SocketService {
 
   void disconnect() {
     if (_socket != null) {
+      // We only dispose the socket, we don't close the stream controllers.
+      // The controllers are app-lifetime objects.
       _socket!.dispose();
       _socket = null;
       log.info('Socket disconnected and disposed.');
-    }
-    if (!_messageController.isClosed) {
-      _messageController.close();
-    }
-    if (!_friendRequestController.isClosed) {
-      _friendRequestController.close();
-    }
-    if (!_readStatusController.isClosed) {
-      _readStatusController.close();
-    }
-    if (!_historyController.isClosed) {
-      _historyController.close();
     }
   }
 

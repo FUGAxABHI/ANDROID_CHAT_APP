@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:frontend/auth_service.dart';
 import 'dart:convert';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:frontend/config.dart';
 import 'package:provider/provider.dart';
 
 final log = Logger('ChatScreen');
@@ -48,7 +49,7 @@ class _ChatScreenState extends State<ChatScreen> {
       return;
     }
 
-    socket = IO.io('http://51.75.118.79:20167', <String, dynamic>{
+    socket = IO.io(AppConfig.baseUrl, <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
       'extraHeaders': {'x-auth-token': token},
@@ -94,7 +95,7 @@ class _ChatScreenState extends State<ChatScreen> {
     socket.onError((data) {
       log.severe('Socket Error: $data');
             if (data.toString().contains('Authentication error: Invalid token.')) {
-              Provider.of<AuthService>(context, listen: false).logout();
+              Provider.of<AuthService>(context, listen: false).logout(context);
               Navigator.pushReplacementNamed(context, '/login');
             }
           });
@@ -128,7 +129,7 @@ class _ChatScreenState extends State<ChatScreen> {
                 IconButton(
                   icon: const Icon(Icons.logout),
                   onPressed: () async {
-                    Provider.of<AuthService>(context, listen: false).logout();
+Provider.of<AuthService>(context, listen: false).logout(context);
                     Navigator.pushReplacementNamed(context, '/login');
                   },
                 ),

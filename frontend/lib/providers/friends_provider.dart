@@ -129,6 +129,20 @@ class FriendsProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  void reset() {
+    _friendRequests = [];
+    _friends = [];
+    _mutualFriends = [];
+    _isLoadingFriends = false;
+    _friendsError = null;
+    _isLoadingFriendRequests = false;
+    _friendRequestsError = null;
+    _isLoadingMutualFriends = false;
+    _mutualFriendsError = null;
+    _friendRequestSubscription?.cancel();
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     _friendRequestSubscription?.cancel();

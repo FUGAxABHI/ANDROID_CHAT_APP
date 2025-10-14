@@ -37,6 +37,7 @@ app.use('/api/upload', uploadRoutes);
 
 // Serve uploaded files
 app.use('/uploads', express.static('uploads'));
+app.use('/images', express.static('images'));
 
 app.get('/', (req, res) => {
   res.send('Backend is running!');

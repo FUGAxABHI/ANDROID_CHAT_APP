@@ -9,6 +9,11 @@ import 'package:frontend/socket_service.dart';
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:frontend/models/user.dart';
 
+import 'package:frontend/providers/chat_provider.dart';
+import 'package:frontend/providers/friends_provider.dart';
+import 'package:frontend/providers/profile_provider.dart';
+import 'package:provider/provider.dart';
+
 final log = Logger('AuthService');
 
 enum AuthStatus { Uninitialized, Authenticated, Unauthenticated }
@@ -107,8 +112,14 @@ class AuthService with ChangeNotifier {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout(BuildContext context) async {
     log.info('[AuthService] - Logging out.');
+
+    // Reset all providers
+    Provider.of<ChatProvider>(context, listen: false).reset();
+    Provider.of<FriendsProvider>(context, listen: false).reset();
+    Provider.of<ProfileProvider>(context, listen: false).reset();
+
     _token = null;
     _status = AuthStatus.Unauthenticated;
     SharedPreferences prefs = await SharedPreferences.getInstance();

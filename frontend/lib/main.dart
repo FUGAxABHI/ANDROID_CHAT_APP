@@ -60,19 +60,16 @@ void main() async {
         Provider<UserService>(
           create: (context) => UserService(),
         ),
-        ChangeNotifierProvider(
-          create: (context) => ChatProvider(
-            Provider.of<ApiService>(context, listen: false),
-            Provider.of<AuthService>(context, listen: false),
-            Provider.of<UserService>(context, listen: false),
-          ),
-        ),
+
         ChangeNotifierProvider(create: (context) => ProfileProvider()),
         Provider<FriendsService>(
           create: (context) => FriendsService(Provider.of<ApiService>(context, listen: false)),
         ),
         Provider<ChatService>(
           create: (context) => ChatService(Provider.of<ApiService>(context, listen: false)),
+        ),
+        ChangeNotifierProvider(
+          create: (context) => ChatProvider(Provider.of<ApiService>(context, listen: false), Provider.of<AuthService>(context, listen: false), Provider.of<UserService>(context, listen: false)),
         ),
         ChangeNotifierProvider(
           create: (context) => FriendsProvider(Provider.of<FriendsService>(context, listen: false)),

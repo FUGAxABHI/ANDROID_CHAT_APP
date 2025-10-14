@@ -78,15 +78,19 @@ exports.getUserProfile = async (req, res) => {
 exports.getUserByUsername = async (req, res) => {
     try {
         const { username } = req.params;
+        logger.debug(`[getUserByUsername] Attempting to find user: ${username}`);
         const trimmedUsername = username.trim();
-        const user = await User.findOne({ username: trimmedUsername }).select('-password'); // Exclude password
+        const user = await User.findOne({ username: { $regex: new RegExp('^' + trimmedUsername + '$', 'i') } }).select('-password'); // Exclude password
+        logger.debug(`[getUserByUsername] User.findOne result for ${trimmedUsername}: ${user ? 'found' : 'not found'}.`);
         if (!user) {
+            logger.debug(`[getUserByUsername] User ${trimmedUsername} not found. Returning 404.`);
             return res.status(404).json({ message: 'User not found' });
         }
+        logger.debug(`[getUserByUsername] User ${trimmedUsername} found. Returning 200.`);
         res.status(200).json({ user: { ...user.toObject(), username: user.username.trim() } });
     } catch (error) {
-        logger.error('Error getting user by username:', error);
-        res.status(500).json({ message: 'Server error' });
+        logger.error('[getUserByUsername] Error getting user by username:', error.message, error.stack);
+        res.status(500).json({ message: 'Server error', error: error.message, stack: error.stack });
     }
 };
 

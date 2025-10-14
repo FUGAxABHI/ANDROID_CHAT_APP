@@ -1,22 +1,61 @@
-const bcrypt = require('bcrypt');
-const logger = require('../utils/logger');
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const CryptoJS = require('crypto-js');
+const bcrypt = require('bcrypt'); // Re-add bcrypt for migration
+const jwt = require('jsonwebtoken');
+const logger = require('../utils/logger');
 
 exports.register = async (req, res) => {
+  const { username, password } = req.body;
+
   try {
-    const username = req.body.username.trim();
+    logger.debug(`[Register] Start registration for user: ${username}`);
+    logger.debug(`[Register] Step 1: Checking if user ${username} exists.`);
+    let user = await User.findOne({ username });
+    logger.debug(`[Register] Step 1 Result: User.findOne returned ${user ? 'found' : 'not found'}.`);
     if (user) {
+      logger.debug(`[Register] User ${username} already exists. Returning 400.`);
       return res.status(400).json({ message: 'User already exists' });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    user = await User.create({ username, password: hashedPassword });
+    logger.debug(`[Register] Step 2: Creating new User instance for: ${username}`);
+    user = new User({
+      username,
+      password,
+    });
+    logger.debug(`[Register] Step 2 Result: New User instance created: ${user ? 'success' : 'failure'}.`);
 
-    res.status(201).json({ message: 'User registered successfully' });
-  } catch (error) {
-    logger.error('Error in register: ', error);
-    res.status(500).json({ message: 'Server error' });
+    logger.debug(`[Register] Step 3: Hashing password for user: ${username}`);
+    user.password = CryptoJS.SHA256(password).toString();
+    logger.debug(`[Register] Step 3 Result: Password hashed.`);
+
+    logger.info(`[Register] --- PROOF POINT 1: Backend received registration request for user: ${username}. About to save to database...`);
+    await user.save();
+    logger.info(`[Register] --- PROOF POINT 2: Successfully saved user to database.`);
+
+    logger.debug(`[Register] Step 5: Generating JWT payload for user: ${username}`);
+    const payload = {
+      id: user.id,
+      username: user.username,
+    };
+    logger.debug(`[Register] Step 5 Result: Payload created.`);
+
+    logger.debug(`[Register] Step 6: Signing JWT token for user: ${username}`);
+    jwt.sign(
+      payload,
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' },
+      (err, token) => {
+        if (err) {
+          logger.error(`[Register] Step 6 Error: JWT signing failed: ${err.message}`, err);
+          throw err;
+        }
+        logger.debug(`[Register] Step 6 Result: JWT token signed. Sending 201 response.`);
+        res.status(201).json({ token });
+      }
+    );
+  } catch (err) {
+    logger.error('[Register] Server error during registration:', err.message, err.stack);
+    res.status(500).json({ message: 'Server error', error: err.message, stack: err.stack });
   }
 };
 
@@ -24,12 +63,25 @@ exports.login = async (req, res) => {
   try {
     const { username, password } = req.body;
 
-    const user = await User.findOne({ username });
+    let user = await User.findOne({ username });
     if (!user) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
+    // Try comparing with new hash (CryptoJS.SHA256)
+    let isMatch = CryptoJS.SHA256(password).toString() === user.password;
+
+    if (!isMatch) {
+      // If new hash fails, try comparing with old hash (bcrypt)
+      const isOldHashMatch = await bcrypt.compare(password, user.password);
+      if (isOldHashMatch) {
+        // Migrate password to new hash
+        user.password = CryptoJS.SHA256(password).toString();
+        await user.save();
+        isMatch = true; // Password successfully migrated
+      }
+    }
+
     if (!isMatch) {
       return res.status(400).json({ message: 'Invalid credentials' });
     }

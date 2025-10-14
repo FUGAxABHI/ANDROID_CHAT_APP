@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import 'package:frontend/auth_service.dart';
 import 'dart:convert';
 
+import 'package:frontend/config.dart';
+
 class ProfileView extends StatefulWidget {
   const ProfileView({super.key});
 
@@ -70,7 +72,7 @@ class _ProfileViewState extends State<ProfileView> {
               children: [
                 CircleAvatar(
                   radius: 80,
-                  backgroundImage: NetworkImage(user.avatar),
+                  backgroundImage: NetworkImage(AppConfig.baseUrl + user.avatar),
                 ),
                 const SizedBox(height: 20),
                 Text(

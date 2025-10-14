@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frontend/config.dart';
 import 'package:frontend/providers/profile_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -50,7 +51,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                 Center(
                   child: CircleAvatar(
                     radius: 80,
-                    backgroundImage: NetworkImage(profileProvider.user?.avatar ?? ''),
+                    backgroundImage: NetworkImage(profileProvider.user?.avatar != null ? AppConfig.baseUrl + profileProvider.user!.avatar : ''),
                   ),
                 ),
                 const SizedBox(height: 20),

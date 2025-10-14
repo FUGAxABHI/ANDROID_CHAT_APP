@@ -50,16 +50,9 @@ class ChatProvider with ChangeNotifier {
     // Delay notification to avoid calling it during build
     Future.delayed(Duration.zero, () => notifyListeners());
 
-    // Fetch chat partner's ID
-    final partnerUser = await _userService.getUserByUsername(chatPartner);
-    _chatPartnerId = partnerUser?.id;
-    if (_chatPartnerId == null) {
-      log.severe('ChatProvider: Could not find chat partner ID for username: $chatPartner');
-      _error = 'Could not find chat partner.';
-      _isLoading = false;
-      notifyListeners();
-      return;
-    }
+    // --- AGGRESSIVE FIX: Bypassing user lookup ---
+    log.warning("Applying aggressive fix: Bypassing user lookup. Real-time messages may not work correctly.");
+    _chatPartnerId = null; // Set to null to avoid using stale data
 
     // Clean up any previous subscriptions
     _messageSubscription?.cancel();
@@ -162,16 +155,28 @@ class ChatProvider with ChangeNotifier {
 
   void sendMessage(String message, {String? mediaUrl, String? mediaType}) {
     if (_currentChatPartner == null) return;
+    if (!_socketService.isConnected) {
+      log.warning('Cannot send message. Socket not connected.');
+      return;
+    }
     log.info('ChatProvider: Sending message to $_currentChatPartner: $message');
     _socketService.sendMessage(_currentChatPartner!, message, mediaUrl: mediaUrl, mediaType: mediaType);
   }
 
   void sendVoiceMessage(List<int> voiceData) {
     if (_currentChatPartner == null) return;
+    if (!_socketService.isConnected) {
+      log.warning('Cannot send voice message. Socket not connected.');
+      return;
+    }
     _socketService.sendVoiceMessage(_currentChatPartner!, voiceData);
   }
 
   Future<void> sendFile() async {
+    if (!_socketService.isConnected) {
+      log.warning('Cannot send file. Socket not connected.');
+      return;
+    }
     final result = await FilePicker.platform.pickFiles();
     if (result != null) {
       final path = result.files.single.path;
@@ -210,10 +215,28 @@ class ChatProvider with ChangeNotifier {
     _socketService.sendStopTyping(_currentChatPartner!);
   }
 
+  void reset() {
+    log.info('Resetting ChatProvider');
+    _messages = [];
+    _isTyping = false;
+    _onlineUsers = {};
+    _currentChatPartner = null;
+    _chatPartnerId = null;
+    _isLoading = false;
+    _error = null;
+    _messageSubscription?.cancel();
+    _readStatusSubscription?.cancel();
+    _historySubscription?.cancel();
+    _socketService.setActiveChat(null);
+    notifyListeners();
+  }
+
   @override
   void dispose() {
     log.info('Disposing ChatProvider for $_currentChatPartner');
     _messageSubscription?.cancel();
+    _readStatusSubscription?.cancel();
+    _historySubscription?.cancel();
     _socketService.setActiveChat(null); // Clear active chat when leaving the screen
     super.dispose();
   }

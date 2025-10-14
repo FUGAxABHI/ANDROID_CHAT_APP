@@ -46,4 +46,11 @@ class ProfileProvider with ChangeNotifier {
     _isLoading = false;
     notifyListeners();
   }
+
+  void reset() {
+    _user = null;
+    _isLoading = false;
+    _error = null;
+    notifyListeners();
+  }
 }

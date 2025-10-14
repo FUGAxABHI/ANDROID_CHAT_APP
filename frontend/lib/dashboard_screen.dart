@@ -50,7 +50,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               IconButton(
                 icon: const Icon(Icons.logout),
                 onPressed: () async {
-                  Provider.of<AuthService>(context, listen: false).logout();
+                  Provider.of<AuthService>(context, listen: false).logout(context);
                   Navigator.pushReplacementNamed(context, '/login');
                 },
               ),
