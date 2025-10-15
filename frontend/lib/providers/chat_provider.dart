@@ -50,9 +50,22 @@ class ChatProvider with ChangeNotifier {
     // Delay notification to avoid calling it during build
     Future.delayed(Duration.zero, () => notifyListeners());
 
-    // --- AGGRESSIVE FIX: Bypassing user lookup ---
-    log.warning("Applying aggressive fix: Bypassing user lookup. Real-time messages may not work correctly.");
-    _chatPartnerId = null; // Set to null to avoid using stale data
+    try {
+      final user = await _userService.getUserByUsername(chatPartner);
+      if (user != null) {
+        _chatPartnerId = user.id;
+      } else {
+        _error = 'Could not find user: $chatPartner';
+        _isLoading = false;
+        notifyListeners();
+        return;
+      }
+    } catch (e) {
+      _error = 'Error fetching user: $e';
+      _isLoading = false;
+      notifyListeners();
+      return;
+    }
 
     // Clean up any previous subscriptions
     _messageSubscription?.cancel();

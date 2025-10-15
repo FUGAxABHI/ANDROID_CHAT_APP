@@ -18,11 +18,17 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   int _selectedIndex = 0;
-  final List<Widget> _views = [
-    const ChatsView(),
-    const FriendsView(),
-    const ProfileView(),
-  ];
+  late List<Widget> _views;
+
+  @override
+  void initState() {
+    super.initState();
+    _views = [
+      const ChatsView(),
+      const FriendsView(),
+      const ProfileView(),
+    ];
+  }
 
   @override
   void dispose() {

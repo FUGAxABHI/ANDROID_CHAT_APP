@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/providers/friends_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:frontend/config.dart';
 
 class FriendsListScreen extends StatefulWidget {
   const FriendsListScreen({super.key});

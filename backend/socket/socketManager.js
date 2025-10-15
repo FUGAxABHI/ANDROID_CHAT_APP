@@ -23,7 +23,7 @@ const initSocket = (server) => {
   io.use(socketAuthMiddleware(connectedUsers));
 
   io.on('connection', (socket) => {
-    logger.info(`User connected: ${socket.user.username} (Socket ID: ${socket.id})`);
+    logger.info(`[SocketManager] User connected: ${socket.user.username} (Socket ID: ${socket.id})`);
 
     // Announce that a new user has joined
     io.emit('user joined', socket.user.username);
@@ -31,12 +31,12 @@ const initSocket = (server) => {
     registerChatHandlers(io, socket, connectedUsers);
 
     // Fetch and deliver any messages that were sent while the user was offline
-    // deliverOfflineMessages(socket);
+    deliverOfflineMessages(socket);
 
     socket.on('disconnect', () => {
       if (socket.user && socket.user.username) {
         delete connectedUsers[socket.user.username];
-        logger.info(`User disconnected: ${socket.user.username}. Remaining users: ${Object.keys(connectedUsers).length}`);
+        logger.info(`[SocketManager] User disconnected: ${socket.user.username}. Remaining users: ${Object.keys(connectedUsers).length}`);
         io.emit('user left', socket.user.username);
       }
     });
@@ -46,6 +46,7 @@ const initSocket = (server) => {
 };
 
 const deliverOfflineMessages = async (socket) => {
+  logger.info(`[Offline Messages] Checking for offline messages for user: ${socket.user.username}`);
   try {
     const unreadMessages = await Message.find({ recipient: socket.user._id, isRead: false })
       .populate('sender', 'username')
@@ -61,6 +62,8 @@ const deliverOfflineMessages = async (socket) => {
         { $set: { isRead: true } } // Or a new 'deliveredAt' field could be used
       );
       logger.info(`[Offline Messages] ${unreadMessages.length} messages for ${socket.user.username} marked as read.`);
+    } else {
+      logger.info(`[Offline Messages] No new messages for ${socket.user.username}.`);
     }
   } catch (error) {
     logger.error(`[Offline Messages] Error fetching/delivering unread messages for ${socket.user.username}: ${error.message}`);

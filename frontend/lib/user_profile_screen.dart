@@ -4,6 +4,7 @@ import 'package:frontend/providers/friends_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:frontend/auth_service.dart';
 import 'dart:convert';
+import 'package:frontend/config.dart';
 
 class UserProfileScreen extends StatefulWidget {
   final String userId;

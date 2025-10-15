@@ -60,37 +60,34 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-  try {
-    const { username, password } = req.body;
+  const { username, password } = req.body;
+  logger.info(`[Login] Attempting login for user: ${username}`);
 
+  try {
+    logger.debug(`[Login] Step 1: Finding user '${username}' in the database.`);
     let user = await User.findOne({ username });
     if (!user) {
+      logger.warn(`[Login] Auth failed: User '${username}' not found.`);
+      return res.status(400).json({ message: 'Invalid credentials' });
+    }
+    logger.debug(`[Login] Step 1 Result: User found. User ID: ${user._id}`);
+
+    logger.debug(`[Login] Step 2: Comparing password for user '${username}'.`);
+    const isMatch = CryptoJS.SHA256(password).toString() === user.password;
+    logger.debug(`[Login] Step 2 Result: Password match: ${isMatch}`);
+
+    if (!isMatch) {
+      logger.warn(`[Login] Auth failed: Invalid password for user '${username}'.`);
       return res.status(400).json({ message: 'Invalid credentials' });
     }
 
-    // Try comparing with new hash (CryptoJS.SHA256)
-    let isMatch = CryptoJS.SHA256(password).toString() === user.password;
-
-    if (!isMatch) {
-      // If new hash fails, try comparing with old hash (bcrypt)
-      const isOldHashMatch = await bcrypt.compare(password, user.password);
-      if (isOldHashMatch) {
-        // Migrate password to new hash
-        user.password = CryptoJS.SHA256(password).toString();
-        await user.save();
-        isMatch = true; // Password successfully migrated
-      }
-    }
-
-    if (!isMatch) {
-      return res.status(400).json({ message: 'Invalid credentials' });
-    }
-
+    logger.debug(`[Login] Step 3: Generating JWT for user '${username}'.`);
     const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    logger.info(`[Login] Successfully generated JWT for user '${username}'.`);
 
     res.json({ token });
   } catch (error) {
-    logger.error('Error in login: ', error);
-    res.status(500).json({ message: 'Server error' });
+    logger.error(`[Login] Server error during login for user '${username}':`, error.message, error.stack);
+    res.status(500).json({ message: 'Server error', error: error.message });
   }
 };

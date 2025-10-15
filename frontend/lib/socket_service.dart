@@ -15,10 +15,11 @@ class SocketService {
   IO.Socket? _socket;
   String? _activeChatUsername;
   final NotificationService _notificationService = NotificationService();
-  StreamController<Map<String, dynamic>> _messageController = StreamController.broadcast();
-  StreamController<Map<String, dynamic>> _friendRequestController = StreamController.broadcast();
-  StreamController<Map<String, dynamic>> _readStatusController = StreamController.broadcast();
-  StreamController<List<dynamic>> _historyController = StreamController.broadcast();
+  late StreamController<Map<String, dynamic>> _messageController;
+  late StreamController<Map<String, dynamic>> _friendRequestController;
+  late StreamController<Map<String, dynamic>> _readStatusController;
+  late StreamController<List<dynamic>> _historyController;
+  List<dynamic>? _cachedHistory;
 
   // --- Public Properties ---
   Stream<Map<String, dynamic>> get messageStream => _messageController.stream;
@@ -51,17 +52,27 @@ class SocketService {
       },
     });
 
-    // Register event listeners
+    // Create new stream controllers for this session
+    _messageController = StreamController.broadcast();
+    _friendRequestController = StreamController.broadcast();
+    _readStatusController = StreamController.broadcast();
+    _historyController = StreamController.broadcast();
+
     _registerSocketEvents();
   }
 
   void disconnect() {
     if (_socket != null) {
-      // We only dispose the socket, we don't close the stream controllers.
-      // The controllers are app-lifetime objects.
       _socket!.dispose();
       _socket = null;
-      log.info('Socket disconnected and disposed.');
+
+      // Close all stream controllers to clean up
+      _messageController.close();
+      _friendRequestController.close();
+      _readStatusController.close();
+      _historyController.close();
+
+      log.info('Socket disconnected and all streams closed.');
     }
   }
 
@@ -107,7 +118,15 @@ class SocketService {
     _socket?.emit('stop typing', {'to': to});
   }
 
+  String? _lastHistoryUser;
+
   void getMessageHistory(String withUser) {
+    log.info('Getting message history for $withUser');
+    if (_lastHistoryUser == withUser && _cachedHistory != null) {
+      log.info('Using cached history for $withUser');
+      _historyController.add(_cachedHistory!);
+    }
+    _lastHistoryUser = withUser;
      _socket?.emit('get private messages', {'withUser': withUser});
   }
 
@@ -140,10 +159,16 @@ class SocketService {
       }
     });
 
+
+
+
+
     // Listen for historical private messages (array of messages)
     _socket!.on('private messages', (data) {
+      log.info('Received private messages from socket');
       if (data is List) {
-        _historyController.add(data.cast<Map<String, dynamic>>());
+        _cachedHistory = data.cast<Map<String, dynamic>>();
+        _historyController.add(_cachedHistory!);
       }
     });
     // Listen for friend-related events

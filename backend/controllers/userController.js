@@ -29,34 +29,78 @@ exports.getRecentChats = async (req, res) => {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    const messages = await Message.find({
-      $or: [{ sender: user._id }, { recipient: user._id }],
-    }).sort({ timestamp: -1 }).populate('sender').populate('recipient');
+    const messages = await Message.aggregate([
+      {
+        $match: {
+          $or: [{ sender: user._id }, { recipient: user._id }],
+        },
+      },
+      {
+        $sort: { timestamp: -1 },
+      },
+      {
+        $group: {
+          _id: {
+            $cond: {
+              if: { $eq: ['$sender', user._id] },
+              then: '$recipient',
+              else: '$sender',
+            },
+          },
+          lastMessage: { $first: '$$ROOT' },
+        },
+      },
+      {
+        $lookup: {
+          from: 'users',
+          localField: '_id',
+          foreignField: '_id',
+          as: 'user',
+        },
+      },
+      {
+        $unwind: '$user',
+      },
+      {
+        $project: {
+          'user.password': 0,
+        },
+      },
+    ]);
 
-    const recentChats = {};
-    for (const message of messages) {
-      const otherUser = message.sender._id.equals(user._id) ? message.recipient : message.sender;
-      if (!otherUser) continue; // Skip public messages
-      const otherUsername = otherUser.username;
+    const unreadCounts = await Message.aggregate([
+        {
+            $match: {
+                recipient: user._id,
+                isRead: false,
+            },
+        },
+        {
+            $group: {
+                _id: '$sender',
+                unreadCount: { $sum: 1 },
+            },
+        },
+    ]);
 
-      if (!recentChats[otherUsername]) {
-        recentChats[otherUsername] = {
-          user: otherUser,
-          lastMessage: message,
-          unreadCount: 0,
-        };
-      }
-      if (message.recipient && message.recipient._id.equals(user._id) && !message.isRead) {
-        recentChats[otherUsername].unreadCount++;
-      }
-    }
+    const unreadCountsMap = unreadCounts.reduce((acc, item) => {
+        acc[item._id] = item.unreadCount;
+        return acc;
+    }, {});
 
-    res.status(200).json(Object.values(recentChats).map(data => ({
-      username: data.user.username.trim(),
-      lastMessage: data.lastMessage,
-      unreadCount: data.unreadCount,
-    })));
+    const recentChats = messages.map(chat => ({
+        username: chat.user.username.trim(),
+        lastMessage: chat.lastMessage,
+        unreadCount: unreadCountsMap[chat.user._id.toString()] || 0,
+    }));
+
+    logger.info(`[getRecentChats] messages: ${JSON.stringify(messages, null, 2)}`);
+    logger.info(`[getRecentChats] unreadCounts: ${JSON.stringify(unreadCounts, null, 2)}`);
+    logger.info(`[getRecentChats] recentChats: ${JSON.stringify(recentChats, null, 2)}`);
+
+    res.status(200).json(recentChats);
   } catch (error) {
+    logger.error('Error getting recent chats:', error);
     res.status(500).json({ message: 'Error getting recent chats' });
   }
 };

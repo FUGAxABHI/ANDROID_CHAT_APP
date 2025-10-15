@@ -72,7 +72,7 @@ class _ProfileViewState extends State<ProfileView> {
               children: [
                 CircleAvatar(
                   radius: 80,
-                  backgroundImage: NetworkImage(AppConfig.baseUrl + user.avatar),
+                  backgroundImage: NetworkImage(user.avatar),
                 ),
                 const SizedBox(height: 20),
                 Text(

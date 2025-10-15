@@ -12,7 +12,7 @@ const server = http.createServer(app);
 // Initialize Socket.IO and pass the server instance
 initSocket(server);
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors());
 app.use(express.json());
 
 // Auth routes

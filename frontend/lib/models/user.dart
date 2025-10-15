@@ -1,3 +1,5 @@
+import 'package:frontend/config.dart';
+
 class User {
   final String id;
   final String username;
@@ -26,11 +28,16 @@ class User {
       }
     }
 
+    String avatarUrl = json['avatar'] ?? '';
+    if (avatarUrl.startsWith('/')) {
+      avatarUrl = '${AppConfig.baseUrl}$avatarUrl';
+    }
+
     return User(
       id: json['_id'],
       username: json['username'],
       bio: json['bio'] ?? '',
-      avatar: json['avatar'] ?? '',
+      avatar: avatarUrl,
       friends: friendsList,
     );
   }

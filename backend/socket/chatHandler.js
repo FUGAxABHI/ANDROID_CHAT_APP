@@ -5,66 +5,60 @@ const logger = require('../utils/logger');
 // This object will be managed by the main socket handler
 // to keep track of all connected users.
 const registerChatHandlers = (io, socket, connectedUsers) => {
-  // Handler for fetching message history (example, can be expanded)
+  // Handler for fetching message history
   socket.on('message history', async () => {
     if (!socket.user) {
-      logger.error('Attempted to get message history without authenticated user.');
+      logger.error('[ChatHandler] Attempted to get message history without authenticated user.');
       return;
     }
+    logger.info(`[ChatHandler] User ${socket.user.username} requested message history.`);
     try {
-      // Example: fetching public messages. This should be adapted for specific chat rooms.
       const messages = await Message.find({ recipient: 'all' }).sort({ timestamp: 1 }).populate('sender', 'username');
       socket.emit('message history', messages);
+      logger.info(`[ChatHandler] Sent ${messages.length} messages to ${socket.user.username}.`);
     } catch (error) {
-      logger.error('Error fetching message history:', error);
+      logger.error('[ChatHandler] Error fetching message history:', error.message, error.stack);
     }
   });
 
   // Handler for one-on-one private messages
   socket.on('private message', async (data) => {
-    logger.info(`[Private Message] Received from ${socket.user.username}: ${JSON.stringify(data)}`);
     if (!socket.user) {
-      logger.error('[Private Message] Attempted to send private message without authenticated user.');
+      logger.error('[ChatHandler] Attempted to send private message without authenticated user.');
       return;
     }
+    logger.info(`[ChatHandler] Received private message from ${socket.user.username} to ${data.to}: ${data.message}`);
 
     const { to, message, isVoice, voiceData } = data;
     const recipientUser = await User.findOne({ username: to });
 
     if (!recipientUser) {
-      logger.error(`[Private Message] Recipient user ${to} not found.`);
-      // Optionally, emit an error back to the sender
+      logger.error(`[ChatHandler] Recipient user ${to} not found.`);
       socket.emit('error', { message: `User ${to} not found.` });
       return;
     }
-
-    logger.info(`[Private Message] Recipient user found: ${recipientUser.username}`);
 
     try {
       const newMessage = new Message({
         sender: socket.user._id,
         recipient: recipientUser._id,
         message,
-        // The schema needs to be updated to handle these fields properly
-        // isVoice,
-        // voiceData,
       });
       await newMessage.save();
       const populatedMessage = await Message.findById(newMessage._id).populate('sender', 'username');
-      logger.info(`[Private Message] Message saved and populated: ${JSON.stringify(populatedMessage)}`);
+      logger.info(`[ChatHandler] Message saved to DB: ${populatedMessage._id}`);
 
       const receiverSocketId = connectedUsers[recipientUser.username];
       if (receiverSocketId) {
-        logger.info(`[Private Message] Recipient ${recipientUser.username} is online. Emitting to socket ID: ${receiverSocketId}`);
+        logger.info(`[ChatHandler] Recipient ${recipientUser.username} is online. Emitting to socket ID: ${receiverSocketId}`);
         io.to(receiverSocketId).emit('private message', { message: populatedMessage });
       } else {
-        logger.info(`[Private Message] Recipient ${recipientUser.username} is offline. Message will be delivered upon next connection.`);
+        logger.info(`[ChatHandler] Recipient ${recipientUser.username} is offline.`);
       }
-      // Also send the message back to the sender to confirm it was sent
       socket.emit('private message', { message: populatedMessage });
 
     } catch (error) {
-        logger.error(`[Private Message] Error saving or sending message: ${error.message}`);
+        logger.error(`[ChatHandler] Error sending private message: ${error.message}`, error.stack);
         socket.emit('error', { message: 'Failed to send message.' });
     }
   });
@@ -72,14 +66,15 @@ const registerChatHandlers = (io, socket, connectedUsers) => {
   // Handler for fetching the message history with a specific user
   socket.on('get private messages', async ({ withUser }) => {
     if (!socket.user) {
-      logger.error('Attempted to get private messages without authenticated user.');
+      logger.error('[ChatHandler] Attempted to get private messages without authenticated user.');
       return;
     }
+    logger.info(`[ChatHandler] User ${socket.user.username} requested private messages with ${withUser}.`);
     try {
-      logger.info(`Getting private messages for ${socket.user.username} with ${withUser}`);
       const withUserDoc = await User.findOne({ username: withUser });
       if (!withUserDoc) {
-        return logger.error(`User ${withUser} not found`);
+        logger.error(`[ChatHandler] User ${withUser} not found`);
+        return;
       }
       const messages = await Message.find({
         $or: [
@@ -87,10 +82,10 @@ const registerChatHandlers = (io, socket, connectedUsers) => {
           { sender: withUserDoc._id, recipient: socket.user._id },
         ],
       }).sort({ timestamp: 1 }).populate('sender', 'username');
-      logger.info(`Found ${messages.length} messages`);
+      logger.info(`[ChatHandler] Found ${messages.length} private messages between ${socket.user.username} and ${withUser}.`);
       socket.emit('private messages', messages);
     } catch (error) {
-      logger.error('Error fetching private messages:', error);
+      logger.error('[ChatHandler] Error fetching private messages:', error.message, error.stack);
     }
   });
 
@@ -115,25 +110,27 @@ const registerChatHandlers = (io, socket, connectedUsers) => {
   // Handler for marking messages as read
   socket.on('mark messages as read', async ({ withUser }) => {
     if (!socket.user) {
-        logger.error('Attempted to mark messages as read without authenticated user.');
+        logger.error('[ChatHandler] Attempted to mark messages as read without authenticated user.');
         return;
     }
+    logger.info(`[ChatHandler] User ${socket.user.username} is marking messages with ${withUser} as read.`);
     try {
         const withUserDoc = await User.findOne({ username: withUser });
         if (!withUserDoc) {
-          return logger.error(`User ${withUser} not found`);
+          logger.error(`[ChatHandler] User ${withUser} not found`);
+          return;
         }
-        await Message.updateMany(
+        const updateResult = await Message.updateMany(
             { sender: withUserDoc._id, recipient: socket.user._id, isRead: false },
             { $set: { isRead: true } }
         );
-        // Notify the other user that their messages have been read
+        logger.info(`[ChatHandler] Marked ${updateResult.nModified} messages as read.`);
         const senderSocketId = connectedUsers[withUser];
         if (senderSocketId) {
             io.to(senderSocketId).emit('messages marked as read', { byUser: socket.user.username, withUser: socket.user.username });
         }
     } catch (error) {
-        logger.error('Error marking messages as read:', error);
+        logger.error('[ChatHandler] Error marking messages as read:', error.message, error.stack);
     }
   });
 };
