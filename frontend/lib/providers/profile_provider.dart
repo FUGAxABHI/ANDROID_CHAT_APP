@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
-import 'package:frontend/user_service.dart';
+import 'package:frontend/api/user_service.dart';
 
 class ProfileProvider with ChangeNotifier {
-  final UserService _userService = UserService();
+  final UserService _userService;
+
+  ProfileProvider(this._userService);
 
   User? _user;
   bool _isLoading = false;
@@ -28,16 +30,34 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> updateUserProfile(String bio, String avatar) async {
+  Future<void> updateUserProfile(String bio, String avatar, String language) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      await _userService.updateUserProfile(bio, avatar);
+      await _userService.updateUserProfile(bio, avatar, language);
       // After updating, refresh the user profile
       if (_user != null) {
         await getUserProfile(_user!.id);
+      }
+    } catch (e) {
+      _error = e.toString();
+    }
+
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  Future<void> uploadProfilePicture(String imagePath) async {
+    _isLoading = true;
+    _error = null;
+    notifyListeners();
+
+    try {
+      final avatarUrl = await _userService.uploadAvatar(imagePath);
+      if (_user != null) {
+        _user = _user!.copyWith(avatar: avatarUrl);
       }
     } catch (e) {
       _error = e.toString();
