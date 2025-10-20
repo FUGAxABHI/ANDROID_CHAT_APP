@@ -30,6 +30,7 @@ class ApiService with ChangeNotifier {
   }
 
   Future<dynamic> get(String endpoint) async {
+    log.info('GET request to: $endpoint');
     _setLoading(true);
     try {
       final headers = await _getHeaders();
@@ -44,6 +45,7 @@ class ApiService with ChangeNotifier {
   }
 
   Future<dynamic> post(String endpoint, Map<String, dynamic> data) async {
+    log.info('POST request to: $endpoint');
     _setLoading(true);
     try {
       final headers = await _getHeaders();
@@ -62,6 +64,7 @@ class ApiService with ChangeNotifier {
   }
 
   Future<dynamic> put(String endpoint, Map<String, dynamic> data) async {
+    log.info('PUT request to: $endpoint');
     _setLoading(true);
     try {
       final headers = await _getHeaders();
@@ -80,13 +83,19 @@ class ApiService with ChangeNotifier {
   }
 
   Future<dynamic> uploadFile(String endpoint, Uint8List fileBytes, String filename) async {
+    log.info('Uploading file to: $endpoint');
     _setLoading(true);
     try {
       final headers = await _getHeaders();
+      // For multipart requests, the Content-Type is set by the http package itself.
+      // Setting it manually will cause issues.
+      headers.remove('Content-Type');
+      log.info('Upload headers: $headers');
+
       final request = http.MultipartRequest('POST', Uri.parse('${AppConfig.baseUrl}$endpoint'));
       request.headers.addAll(headers);
       request.files.add(http.MultipartFile.fromBytes(
-        'profilePicture', // Field name for the file
+        'file', // Field name for the file
         fileBytes,
         filename: filename,
       ));
@@ -109,6 +118,7 @@ class ApiService with ChangeNotifier {
   }
 
   dynamic _handleResponse(http.Response response) {
+    log.info('Response from: ${response.request?.url}, Status: ${response.statusCode}');
     if (response.statusCode >= 200 && response.statusCode < 300) {
       if (response.body.isNotEmpty) {
         return jsonDecode(response.body);

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:frontend/services/auth_service.dart';
 import 'package:frontend/services/call_service.dart';
+import 'package:frontend/services/socket_service.dart'; // Added import
 
 enum CallStatus {
   none,
@@ -29,13 +30,15 @@ class CallProvider with ChangeNotifier {
   RTCPeerConnection? get peerConnection => _callService?.peerConnection;
   MediaStream? get localStream => _callService?.localStream;
 
-  CallProvider({required AuthService authService}) : _authService = authService {
+  CallProvider({required AuthService authService, String? friendUsername}) : _authService = authService {
     localRenderer.initialize();
     remoteRenderer.initialize();
     _callService = CallService(onAddRemoteStream: (stream) {
       remoteRenderer.srcObject = stream;
       notifyListeners();
-    }, authService: _authService);
+    }, authService: _authService, friendUsername: friendUsername);
+    final socketService = SocketService();
+    socketService.setCallService(_callService!); // Set CallService instance in SocketService
   }
 
   @override
@@ -45,8 +48,8 @@ class CallProvider with ChangeNotifier {
     super.dispose();
   }
 
-  Future<void> init() async {
-    await _callService?.init();
+  Future<void> init(String friendUsername) async {
+    await _callService?.init(friendUsername);
     localRenderer.srcObject = _callService?.localStream;
     notifyListeners();
   }

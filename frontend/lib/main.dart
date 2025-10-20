@@ -141,9 +141,9 @@ class MyApp extends StatelessWidget {
         '/friend_requests': (context) => const FriendRequestsScreen(),
       },
       onGenerateRoute: (settings) {
+        final log = Logger('main');
+        log.info('Navigating to ${settings.name} with arguments: ${settings.arguments}');
         if (settings.name == '/user_profile') {
-          final log = Logger('main');
-          log.info('Navigating to /user_profile with arguments: ${settings.arguments}');
           final args = settings.arguments as Map<String, dynamic>;
           return MaterialPageRoute(
             builder: (context) {

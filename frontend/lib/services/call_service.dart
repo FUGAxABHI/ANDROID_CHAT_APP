@@ -10,11 +10,12 @@ class CallService {
   MediaStream? localStream;
   final Function(MediaStream stream) onAddRemoteStream;
   final AuthService _authService;
+  final String? _friendUsername; // Added friendUsername
   Timer? _callTimeout;
 
-  CallService({required this.onAddRemoteStream, required AuthService authService}) : _authService = authService;
+  CallService({required this.onAddRemoteStream, required AuthService authService, String? friendUsername}) : _authService = authService, _friendUsername = friendUsername;
 
-  Future<void> init() async {
+  Future<void> init(String friendUsername) async {
     peerConnection = await createPeerConnection({
       'iceServers': [
         {'urls': 'stun:stun.l.google.com:19302'},
@@ -22,7 +23,10 @@ class CallService {
     }, {});
 
     peerConnection!.onIceCandidate = (RTCIceCandidate candidate) {
-      // This will be handled in the provider
+      SocketService().emit('ice-candidate', {
+        'to': friendUsername, // Use the friendUsername from the init function parameter
+        'candidate': candidate.toMap(),
+      });
     };
 
     peerConnection!.onTrack = (RTCTrackEvent event) {

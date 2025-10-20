@@ -7,6 +7,9 @@ import 'package:frontend/theme.dart'; // Import AppTheme
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:typed_data';
+import 'package:logging/logging.dart';
+
+final log = Logger('ProfileSettingsScreen');
 
 class ProfileSettingsScreen extends StatefulWidget {
   const ProfileSettingsScreen({super.key});
@@ -28,28 +31,36 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   void initState() {
 
     super.initState();
+    log.info('initState called');
 
     final profileProvider = Provider.of<ProfileProvider>(context, listen: false);
 
     if (profileProvider.user != null) {
-
+      log.info('User data found in profile provider');
       _bioController.text = profileProvider.user!.bio;
 
       _selectedLanguage = profileProvider.user!.language;
 
+    } else {
+      log.warning('User data not found in profile provider');
     }
 
   }
 
 
   Future<void> _pickImage(ProfileProvider profileProvider) async {
+    log.info('Picking image');
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
+      log.info('Image picked: ${pickedFile.name}');
       final fileBytes = await pickedFile.readAsBytes();
       final filename = pickedFile.name;
       await profileProvider.uploadProfilePicture(fileBytes, filename);
+      log.info('Profile picture upload process finished');
+    } else {
+      log.info('Image picking cancelled');
     }
   }
 
@@ -57,7 +68,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
   @override
 
   Widget build(BuildContext context) {
-
+    log.info('Building profile settings screen');
     return Scaffold(
 
       appBar: AppBar(
@@ -69,9 +80,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
       body: Consumer<ProfileProvider>(
 
         builder: (context, profileProvider, child) {
-
+          log.info('Building consumer for profile provider');
           if (profileProvider.isLoading) {
-
+            log.info('Profile provider is loading');
             return const Center(child: CircularProgressIndicator());
 
           }
@@ -112,7 +123,10 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                         right: 0,
                         child: IconButton(
                           icon: const Icon(Icons.camera_alt, color: Colors.white),
-                          onPressed: () => _pickImage(profileProvider),
+                          onPressed: () {
+                            log.info('Pick image button pressed');
+                            _pickImage(profileProvider);
+                          },
                         ),
                       ),
                     ],
@@ -163,7 +177,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                     value: _selectedLanguage,
 
                     onChanged: (String? newValue) {
-
+                      log.info('Language changed to: $newValue');
                       setState(() {
 
                         _selectedLanguage = newValue!;
@@ -199,7 +213,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   value: _notificationsEnabled,
 
                   onChanged: (bool value) {
-
+                    log.info('Notifications enabled: $value');
                     setState(() {
 
                       _notificationsEnabled = value;
@@ -218,6 +232,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                       title: const Text('Glassmorphism Theme', style: TextStyle(color: Colors.white)),
                       value: themeProvider.currentTheme == AppTheme.glassTheme,
                       onChanged: (bool value) {
+                        log.info('Glassmorphism theme enabled: $value');
                         themeProvider.setTheme(value ? AppTheme.glassTheme : AppTheme.darkTheme);
                       },
                       secondary: const Icon(Icons.blur_on, color: Colors.white),
@@ -229,6 +244,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
                   child: ElevatedButton(
                     onPressed: () {
+                      log.info('Background settings button pressed');
                       Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -249,7 +265,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   child: ElevatedButton(
 
                     onPressed: () {
-
+                      log.info('Save changes button pressed');
                       profileProvider.updateUserProfile(
 
                         _bioController.text,

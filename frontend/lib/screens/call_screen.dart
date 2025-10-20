@@ -18,12 +18,29 @@ class _CallScreenState extends State<CallScreen> {
   void initState() {
     super.initState();
     final callProvider = Provider.of<CallProvider>(context, listen: false);
-    callProvider.init().then((_) {
+    callProvider.init(widget.friendUsername).then((_) {
       if (widget.offer == null) {
         callProvider.createOffer(widget.friendUsername);
       } else {
         callProvider.createAnswer(widget.friendUsername, widget.offer);
       }
+    }).catchError((e) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Error'),
+          content: const Text('Could not access camera and microphone. Please make sure they are not in use by another application or browser tab.'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     });
   }
 

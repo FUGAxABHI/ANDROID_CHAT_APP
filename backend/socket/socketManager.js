@@ -10,6 +10,7 @@ const { initFriendHandler } = require('./friendHandler');
 const connectedUsers = {};
 
 const initSocket = (server) => {
+  logger.info('[SocketManager] Initializing Socket.IO...');
   const io = new Server(server, {
     cors: {
       origin: "*", // This should be restricted to your frontend's URL in production
@@ -18,9 +19,11 @@ const initSocket = (server) => {
   });
 
   // Initialize the friend handler with the io instance
+  logger.info('[SocketManager] Initializing friend handler...');
   initFriendHandler(io, connectedUsers);
 
   // Use a shared middleware for authentication
+  logger.info('[SocketManager] Registering socket authentication middleware...');
   io.use(socketAuthMiddleware(connectedUsers));
 
   io.on('connection', (socket) => {
@@ -29,6 +32,7 @@ const initSocket = (server) => {
     // Announce that a new user has joined
     io.emit('user joined', socket.user.username);
 
+    logger.info(`[SocketManager] Registering chat and call handlers for user: ${socket.user.username}`);
     registerChatHandlers(io, socket, connectedUsers);
     registerCallHandlers(io, socket, connectedUsers);
 
@@ -44,6 +48,7 @@ const initSocket = (server) => {
     });
   });
 
+  logger.info('[SocketManager] Socket.IO initialized successfully.');
   return io;
 };
 

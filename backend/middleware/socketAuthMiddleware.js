@@ -4,6 +4,7 @@ const logger = require('../utils/logger');
 
 // socketAuthMiddleware.js
 const socketAuthMiddleware = (connectedUsers) => async (socket, next) => {
+    logger.info('[Socket Auth] Socket auth middleware called.');
     try {
         // Token can be sent via auth header or query param
         const token = socket.handshake.auth.token || socket.handshake.headers['x-auth-token'];
@@ -28,6 +29,7 @@ const socketAuthMiddleware = (connectedUsers) => async (socket, next) => {
 
         logger.info(`[Socket Auth] User '${user.username}' authenticated successfully. Socket ID: ${socket.id}`);
         logger.info(`[Socket Auth] Connected users: ${JSON.stringify(Object.keys(connectedUsers))}`);
+        logger.info('[Socket Auth] Socket auth middleware finished, calling next().');
         next();
     } catch (error) {
         logger.error(`[Socket Auth] Authentication error: ${error.message}`);

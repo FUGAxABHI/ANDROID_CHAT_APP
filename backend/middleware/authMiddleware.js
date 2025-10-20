@@ -3,6 +3,7 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
 module.exports = async (req, res, next) => {
+  logger.info('[AuthMiddleware] Auth middleware called.');
   const token = req.header('x-auth-token');
   logger.debug('[AuthMiddleware] Checking for token.');
 
@@ -23,6 +24,7 @@ module.exports = async (req, res, next) => {
       return res.status(401).json({ message: 'User not found, authorization denied' });
     }
     logger.info(`[AuthMiddleware] User authenticated: ${req.user.username}`);
+    logger.info('[AuthMiddleware] Auth middleware finished, calling next().');
     next();
   } catch (error) {
     logger.error('[AuthMiddleware] Token is not valid:', error.message);

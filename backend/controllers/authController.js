@@ -7,6 +7,7 @@ const util = require('util');
 const signJwt = util.promisify(jwt.sign);
 
 exports.register = async (req, res) => {
+  logger.info('[Register] Register function called.');
   const { username, password } = req.body;
 
   try {
@@ -45,6 +46,7 @@ exports.register = async (req, res) => {
     const token = await signJwt(payload, process.env.JWT_SECRET, { expiresIn: '30d' });
     logger.debug(`[Register] Step 6 Result: JWT token signed. Sending 201 response.`);
     res.status(201).json({ token });
+    logger.info('[Register] Register function finished.');
   } catch (err) {
     logger.error('[Register] Server error during registration:', err.message, err.stack);
     res.status(500).json({ message: 'Server error', error: err.message, stack: err.stack });
@@ -52,6 +54,7 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
+  logger.info('[Login] Login function called.');
   const { username, password } = req.body;
   logger.info(`[Login] Attempting login for user: ${username}`);
 
@@ -78,6 +81,7 @@ exports.login = async (req, res) => {
     logger.info(`[Login] Successfully generated JWT for user '${username}'.`);
 
     res.json({ token });
+    logger.info('[Login] Login function finished.');
   } catch (error) {
     logger.error(`[Login] Server error during login for user '${username}':`, error.message, error.stack);
     res.status(500).json({ message: 'Server error', error: error.message });

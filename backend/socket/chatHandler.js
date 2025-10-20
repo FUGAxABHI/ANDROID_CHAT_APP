@@ -5,6 +5,8 @@ const logger = require('../utils/logger');
 // This object will be managed by the main socket handler
 // to keep track of all connected users.
 const registerChatHandlers = (io, socket, connectedUsers) => {
+  logger.info(`[ChatHandler] Registering chat handlers for user: ${socket.user.username}`);
+
   // Handler for fetching message history
   socket.on('message history', async () => {
     if (!socket.user) {
@@ -92,6 +94,7 @@ const registerChatHandlers = (io, socket, connectedUsers) => {
   // Handler for 'typing' notification
   socket.on('typing', ({ to }) => {
     if (!socket.user) return;
+    logger.info(`[ChatHandler] User ${socket.user.username} is typing to ${to}.`);
     const receiverSocketId = connectedUsers[to];
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('typing', { from: socket.user.username });
@@ -101,6 +104,7 @@ const registerChatHandlers = (io, socket, connectedUsers) => {
   // Handler for 'stop typing' notification
   socket.on('stop typing', ({ to }) => {
     if (!socket.user) return;
+    logger.info(`[ChatHandler] User ${socket.user.username} stopped typing to ${to}.`);
     const receiverSocketId = connectedUsers[to];
     if (receiverSocketId) {
       io.to(receiverSocketId).emit('stop typing', { from: socket.user.username });

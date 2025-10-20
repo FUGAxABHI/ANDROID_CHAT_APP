@@ -1,7 +1,8 @@
-
 const logger = require('../utils/logger');
 
 const registerCallHandlers = (io, socket, connectedUsers) => {
+  logger.info(`[CallHandler] Registering call handlers for user: ${socket.user.username}`);
+
   socket.on('call-user', (data) => {
     logger.info(`[CallHandler] Received 'call-user' from ${socket.user.username} to ${data.to}`);
     const { to, from, signal } = data;

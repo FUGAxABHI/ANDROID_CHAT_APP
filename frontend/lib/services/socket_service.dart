@@ -4,6 +4,8 @@ import 'package:frontend/config.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:frontend/services/notification_service.dart';
 import 'package:logging/logging.dart';
+import 'package:frontend/services/call_service.dart'; // Added import
+import 'package:flutter_webrtc/flutter_webrtc.dart'; // Added import
 
 final log = Logger('SocketService');
 
@@ -23,6 +25,7 @@ class SocketService with ChangeNotifier {
   final Map<String, StreamController<dynamic>> _eventControllers = {};
   List<dynamic>? _cachedHistory;
   GlobalKey<NavigatorState>? navigatorKey;
+  CallService? _callService; // Added CallService instance
 
   // --- Public Properties ---
   Stream<Map<String, dynamic>> get messageStream => _messageController.stream;
@@ -36,6 +39,10 @@ class SocketService with ChangeNotifier {
 
   void init(GlobalKey<NavigatorState> key) {
     navigatorKey = key;
+  }
+
+  void setCallService(CallService callService) {
+    _callService = callService;
   }
 
   // --- Public Methods ---
@@ -242,6 +249,16 @@ class SocketService with ChangeNotifier {
             ],
           ),
         );
+      }
+    });
+
+    _socket!.on('ice-candidate', (data) async {
+      if (_callService?.peerConnection != null) {
+        await _callService!.peerConnection!.addCandidate(RTCIceCandidate(
+          data['candidate']['candidate'],
+          data['candidate']['sdpMid'],
+          data['candidate']['sdpMLineIndex'],
+        ));
       }
     });
 
