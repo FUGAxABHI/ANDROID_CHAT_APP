@@ -1,6 +1,7 @@
 const { Server } = require('socket.io');
 const logger = require('../utils/logger');
 const { registerChatHandlers } = require('./chatHandler');
+const { registerCallHandlers } = require('./callHandler');
 const Message = require('../models/Message');
 const { socketAuthMiddleware } = require('../middleware/socketAuthMiddleware');
 
@@ -29,6 +30,7 @@ const initSocket = (server) => {
     io.emit('user joined', socket.user.username);
 
     registerChatHandlers(io, socket, connectedUsers);
+    registerCallHandlers(io, socket, connectedUsers);
 
     // Fetch and deliver any messages that were sent while the user was offline
     deliverOfflineMessages(socket);

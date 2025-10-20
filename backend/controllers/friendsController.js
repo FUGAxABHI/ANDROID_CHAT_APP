@@ -84,18 +84,23 @@ exports.acceptFriendRequest = async (req, res) => {
       return res.status(403).json({ message: 'You are not authorized to accept this friend request' });
     }
 
-    request.status = 'accepted';
-    await request.save();
-
-    // Add users to each other's friends list
+    // Find the sender and receiver
     const sender = await User.findById(request.sender);
     const receiver = await User.findById(request.receiver);
 
-    sender.friends.push(receiver._id);
-    receiver.friends.push(sender._id);
+    // Add users to each other's friends list if they aren't already friends
+    if (!sender.friends.includes(receiver._id)) {
+        sender.friends.push(receiver._id);
+    }
+    if (!receiver.friends.includes(sender._id)) {
+        receiver.friends.push(sender._id);
+    }
 
     await sender.save();
     await receiver.save();
+
+    // Delete the friend request after it has been accepted
+    await FriendRequest.findByIdAndDelete(requestId);
 
     // Notify the sender that their request was accepted
     const newFriend = { _id: receiver._id, username: receiver.username, avatar: receiver.avatar };

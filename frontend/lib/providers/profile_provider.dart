@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/api/user_service.dart';
+import 'dart:typed_data';
 
 class ProfileProvider with ChangeNotifier {
   final UserService _userService;
@@ -49,13 +50,13 @@ class ProfileProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> uploadProfilePicture(String imagePath) async {
+  Future<void> uploadProfilePicture(Uint8List fileBytes, String filename) async {
     _isLoading = true;
     _error = null;
     notifyListeners();
 
     try {
-      final avatarUrl = await _userService.uploadAvatar(imagePath);
+      final avatarUrl = await _userService.uploadAvatar(fileBytes, filename);
       if (_user != null) {
         _user = _user!.copyWith(avatar: avatarUrl);
       }

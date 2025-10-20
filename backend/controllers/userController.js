@@ -21,88 +21,51 @@ exports.searchUsers = async (req, res) => {
     }
 };
 
-exports.getRecentChats = async (req, res) => {
-  try {
-    const { userId } = req.params;
-    const user = await User.findById(userId);
-    if (!user) {
-      return res.status(404).json({ message: 'User not found' });
-    }
+exports.getAllConversations = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
 
-    const messages = await Message.aggregate([
-      {
-        $match: {
-          $or: [{ sender: user._id }, { recipient: user._id }],
-        },
-      },
-      {
-        $sort: { timestamp: -1 },
-      },
-      {
-        $group: {
-          _id: {
-            $cond: {
-              if: { $eq: ['$sender', user._id] },
-              then: '$recipient',
-              else: '$sender',
-            },
-          },
-          lastMessage: { $first: '$$ROOT' },
-        },
-      },
-      {
-        $lookup: {
-          from: 'users',
-          localField: '_id',
-          foreignField: '_id',
-          as: 'user',
-        },
-      },
-      {
-        $unwind: '$user',
-      },
-      {
-        $project: {
-          'user.password': 0,
-        },
-      },
-    ]);
+        // Get all unique users the current user has had a conversation with
+        const sentToUsers = await Message.distinct('recipient', { sender: user._id });
+        const receivedFromUsers = await Message.distinct('sender', { recipient: user._id });
 
-    const unreadCounts = await Message.aggregate([
-        {
-            $match: {
+        const allUserIds = [...new Set([...sentToUsers, ...receivedFromUsers].map(id => id.toString()))];
+
+        const conversations = await Promise.all(allUserIds.map(async (otherUserId) => {
+            const otherUser = await User.findById(otherUserId);
+            if (!otherUser) return null;
+
+            const lastMessage = await Message.findOne({
+                $or: [
+                    { sender: user._id, recipient: otherUserId },
+                    { sender: otherUserId, recipient: user._id },
+                ],
+            }).sort({ timestamp: -1 });
+
+            const unreadCount = await Message.countDocuments({
+                sender: otherUserId,
                 recipient: user._id,
                 isRead: false,
-            },
-        },
-        {
-            $group: {
-                _id: '$sender',
-                unreadCount: { $sum: 1 },
-            },
-        },
-    ]);
+            });
 
-    const unreadCountsMap = unreadCounts.reduce((acc, item) => {
-        acc[item._id] = item.unreadCount;
-        return acc;
-    }, {});
+            return {
+                username: otherUser.username.trim(),
+                lastMessage: lastMessage,
+                unreadCount: unreadCount,
+            };
+        }));
 
-    const recentChats = messages.map(chat => ({
-        username: chat.user.username.trim(),
-        lastMessage: chat.lastMessage,
-        unreadCount: unreadCountsMap[chat.user._id.toString()] || 0,
-    }));
+        const validConversations = conversations.filter(c => c !== null);
 
-    logger.info(`[getRecentChats] messages: ${JSON.stringify(messages, null, 2)}`);
-    logger.info(`[getRecentChats] unreadCounts: ${JSON.stringify(unreadCounts, null, 2)}`);
-    logger.info(`[getRecentChats] recentChats: ${JSON.stringify(recentChats, null, 2)}`);
-
-    res.status(200).json(recentChats);
-  } catch (error) {
-    logger.error('Error getting recent chats:', error);
-    res.status(500).json({ message: 'Error getting recent chats' });
-  }
+        res.status(200).json(validConversations);
+    } catch (error) {
+        logger.error('Error getting all conversations:', error);
+        res.status(500).json({ message: 'Error getting all conversations' });
+    }
 };
 
 exports.getUserProfile = async (req, res) => {
@@ -141,7 +104,7 @@ exports.getUserByUsername = async (req, res) => {
 exports.updateUserProfile = async (req, res) => {
     try {
         const userId = req.user._id; // Correctly access the user ID
-        const { bio, avatar } = req.body;
+        const { bio, avatar, language } = req.body;
 
         const user = await User.findById(userId);
         if (!user) {
@@ -150,6 +113,7 @@ exports.updateUserProfile = async (req, res) => {
 
         user.bio = bio || user.bio;
         user.avatar = avatar || user.avatar;
+        user.language = language || user.language;
 
         await user.save();
 
@@ -157,5 +121,42 @@ exports.updateUserProfile = async (req, res) => {
     } catch (error) {
         logger.error('Error updating user profile:', error);
         res.status(500).json({ message: 'Error updating user profile' });
+    }
+};
+
+exports.getUserProfileById = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        const user = await User.findById(userId).select('-password'); // Exclude password
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        res.status(200).json({ user: { ...user.toObject(), username: user.username.trim() } });
+    } catch (error) {
+        logger.error('Error getting user profile by ID:', error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+exports.uploadProfilePicture = async (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({ message: 'No file uploaded.' });
+        }
+
+        const userId = req.user._id;
+        const user = await User.findById(userId);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        user.avatar = `/uploads/${req.file.filename}`;
+        await user.save();
+
+        res.status(200).json({ message: 'Profile picture uploaded successfully.', user: user.toObject() });
+    } catch (error) {
+        logger.error('Error uploading profile picture:', error);
+        res.status(500).json({ message: 'Error uploading profile picture.' });
     }
 };

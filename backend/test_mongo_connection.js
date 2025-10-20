@@ -1,6 +1,12 @@
+require('dotenv').config();
 const { MongoClient } = require('mongodb');
 
-const uri = "mongodb+srv://fugaxpro:abhinav@123@fuga.pvjwlwc.mongodb.net/?retryWrites=true&w=majority";
+const uri = process.env.MONGO_URI;
+
+if (!uri) {
+  console.error("MONGO_URI not found in .env file. Please add it.");
+  process.exit(1);
+}
 
 console.log("Attempting to connect to MongoDB with the provided URI...");
 

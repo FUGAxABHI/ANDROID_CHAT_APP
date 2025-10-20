@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/config.dart';
 import 'package:frontend/providers/profile_provider.dart';
+import 'package:frontend/providers/theme_provider.dart'; // Import ThemeProvider
 import 'package:frontend/screens/background_settings_screen.dart';
+import 'package:frontend/theme.dart'; // Import AppTheme
 import 'package:provider/provider.dart';
 import 'package:image_picker/image_picker.dart';
+import 'dart:typed_data';
 
 class ProfileSettingsScreen extends StatefulWidget {
   const ProfileSettingsScreen({super.key});
@@ -16,13 +19,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
 
   final TextEditingController _bioController = TextEditingController();
 
-  // final TextEditingController _avatarController = TextEditingController(); // No longer needed
-
   bool _notificationsEnabled = true;
 
   String _selectedLanguage = 'en';
-
-
 
   @override
 
@@ -36,8 +35,6 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
 
       _bioController.text = profileProvider.user!.bio;
 
-      // _avatarController.text = profileProvider.user!.avatar; // No longer needed
-
       _selectedLanguage = profileProvider.user!.language;
 
     }
@@ -50,7 +47,9 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      await profileProvider.uploadProfilePicture(pickedFile.path);
+      final fileBytes = await pickedFile.readAsBytes();
+      final filename = pickedFile.name;
+      await profileProvider.uploadProfilePicture(fileBytes, filename);
     }
   }
 
@@ -212,6 +211,19 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
                   secondary: const Icon(Icons.notifications, color: Colors.white),
 
                 ),
+                // Theme Switch
+                Consumer<ThemeProvider>(
+                  builder: (context, themeProvider, child) {
+                    return SwitchListTile(
+                      title: const Text('Glassmorphism Theme', style: TextStyle(color: Colors.white)),
+                      value: themeProvider.currentTheme == AppTheme.glassTheme,
+                      onChanged: (bool value) {
+                        themeProvider.setTheme(value ? AppTheme.glassTheme : AppTheme.darkTheme);
+                      },
+                      secondary: const Icon(Icons.blur_on, color: Colors.white),
+                    );
+                  },
+                ),
                 const SizedBox(height: 20),
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 20.0),
@@ -242,7 +254,7 @@ class _ProfileSettingsScreenState extends State<ProfileSettingsScreen> {
 
                         _bioController.text,
 
-                        _avatarController.text,
+                        profileProvider.user?.avatar ?? '',
 
                         _selectedLanguage,
 

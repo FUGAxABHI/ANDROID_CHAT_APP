@@ -24,6 +24,7 @@ const socketAuthMiddleware = (connectedUsers) => async (socket, next) => {
 
         socket.user = user; // Attach user object to the socket instance
         connectedUsers[user.username] = socket.id; // Add user to the connected users list
+        logger.info(`[Socket Auth] User '${user.username}' (ID: ${user.id}) authenticated and attached to socket. Socket ID: ${socket.id}`);
 
         logger.info(`[Socket Auth] User '${user.username}' authenticated successfully. Socket ID: ${socket.id}`);
         logger.info(`[Socket Auth] Connected users: ${JSON.stringify(Object.keys(connectedUsers))}`);

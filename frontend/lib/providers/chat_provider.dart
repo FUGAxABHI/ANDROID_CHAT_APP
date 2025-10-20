@@ -1,18 +1,23 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:frontend/auth_service.dart';
-import 'package:frontend/auth_service.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:frontend/api/api_service.dart';
+import 'package:frontend/api/chat_service.dart';
+import 'package:frontend/services/auth_service.dart';
+import 'package:frontend/services/socket_service.dart';
 import 'package:logging/logging.dart';
-import 'package:frontend/socket_service.dart';
-import 'package:frontend/user_service.dart';
-
-// Assuming Message and User models are defined somewhere, for now using Map<String, dynamic>
-// import 'package:frontend/models/message.dart';
-// import 'package:frontend/models/user.dart';
-
-import 'package:frontend/api_service.dart';
+import 'package:socket_io_client/socket_io_client.dart';
+import 'package:frontend/api/user_service.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:just_audio/just_audio.dart';
+import 'package:record/record.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:http/http.dart' as http;
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'dart:convert';
+import 'dart:async';
+import 'dart:typed_data';
 
 class ChatProvider with ChangeNotifier {
   final log = Logger('ChatProvider');
@@ -48,7 +53,7 @@ class ChatProvider with ChangeNotifier {
     _error = null;
     log.info('ChatProvider: Setting _isLoading to true in init.');
     // Delay notification to avoid calling it during build
-    Future.delayed(Duration.zero, () => notifyListeners());
+    Future.microtask(() => notifyListeners());
 
     try {
       final user = await _userService.getUserByUsername(chatPartner);
@@ -57,13 +62,13 @@ class ChatProvider with ChangeNotifier {
       } else {
         _error = 'Could not find user: $chatPartner';
         _isLoading = false;
-        notifyListeners();
+        Future.microtask(() => notifyListeners());
         return;
       }
     } catch (e) {
       _error = 'Error fetching user: $e';
       _isLoading = false;
-      notifyListeners();
+      Future.microtask(() => notifyListeners());
       return;
     }
 
@@ -77,7 +82,7 @@ class ChatProvider with ChangeNotifier {
       _messages = history;
       _messages.sort((a, b) => DateTime.parse(a['timestamp']).compareTo(DateTime.parse(b['timestamp'])));
       _isLoading = false;
-      notifyListeners();
+      Future.microtask(() => notifyListeners());
     });
 
     // Listen to the global message stream for real-time updates
@@ -111,7 +116,7 @@ class ChatProvider with ChangeNotifier {
       _error = 'Connection lost.';
       _isLoading = false;
       log.info('ChatProvider: Setting _isLoading to false on stream error.');
-      notifyListeners();
+      Future.microtask(() => notifyListeners());
     });
 
     _readStatusSubscription = _socketService.readStatusStream.listen((data) {
@@ -131,7 +136,7 @@ class ChatProvider with ChangeNotifier {
         }
         if (changed) {
           log.info('Messages updated with read status. Notifying listeners.');
-          notifyListeners();
+          Future.microtask(() => notifyListeners());
         }
       }
     });
@@ -162,7 +167,7 @@ class ChatProvider with ChangeNotifier {
       _isLoading = false;
       log.info('ChatProvider: Setting _isLoading to false after processing message.');
     }
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
     log.info('ChatProvider: notifyListeners called in _addOrUpdateMessage.');
   }
 
@@ -192,17 +197,19 @@ class ChatProvider with ChangeNotifier {
     }
     final result = await FilePicker.platform.pickFiles();
     if (result != null) {
-      final path = result.files.single.path;
-      if (path != null) {
+      final platformFile = result.files.single;
+      if (platformFile.bytes != null && platformFile.name != null) {
         try {
-          final response = await _apiService.uploadFile('/api/upload', path);
+          final response = await _apiService.uploadFile('/api/upload', platformFile.bytes!, platformFile.name!);
           final url = response['url'];
           // Determine media type based on file extension
-          final mediaType = _getMediaType(path);
+          final mediaType = _getMediaType(platformFile.name!);
           _socketService.sendMessage(_currentChatPartner!, url, mediaType: mediaType);
         } catch (e) {
           log.severe('Failed to upload file: $e');
         }
+      } else {
+        log.warning('File bytes or filename is null. Cannot upload file.');
       }
     }
   }
@@ -241,7 +248,7 @@ class ChatProvider with ChangeNotifier {
     _readStatusSubscription?.cancel();
     _historySubscription?.cancel();
     _socketService.setActiveChat(null);
-    notifyListeners();
+    Future.microtask(() => notifyListeners());
   }
 
   @override

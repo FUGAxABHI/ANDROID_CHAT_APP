@@ -1,8 +1,10 @@
 const User = require('../models/User');
 const CryptoJS = require('crypto-js');
-const bcrypt = require('bcrypt'); // Re-add bcrypt for migration
 const jwt = require('jsonwebtoken');
 const logger = require('../utils/logger');
+const util = require('util');
+
+const signJwt = util.promisify(jwt.sign);
 
 exports.register = async (req, res) => {
   const { username, password } = req.body;
@@ -40,19 +42,9 @@ exports.register = async (req, res) => {
     logger.debug(`[Register] Step 5 Result: Payload created.`);
 
     logger.debug(`[Register] Step 6: Signing JWT token for user: ${username}`);
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: '1h' },
-      (err, token) => {
-        if (err) {
-          logger.error(`[Register] Step 6 Error: JWT signing failed: ${err.message}`, err);
-          throw err;
-        }
-        logger.debug(`[Register] Step 6 Result: JWT token signed. Sending 201 response.`);
-        res.status(201).json({ token });
-      }
-    );
+    const token = await signJwt(payload, process.env.JWT_SECRET, { expiresIn: '30d' });
+    logger.debug(`[Register] Step 6 Result: JWT token signed. Sending 201 response.`);
+    res.status(201).json({ token });
   } catch (err) {
     logger.error('[Register] Server error during registration:', err.message, err.stack);
     res.status(500).json({ message: 'Server error', error: err.message, stack: err.stack });
@@ -82,7 +74,7 @@ exports.login = async (req, res) => {
     }
 
     logger.debug(`[Login] Step 3: Generating JWT for user '${username}'.`);
-    const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user._id, username: user.username }, process.env.JWT_SECRET, { expiresIn: '30d' });
     logger.info(`[Login] Successfully generated JWT for user '${username}'.`);
 
     res.json({ token });

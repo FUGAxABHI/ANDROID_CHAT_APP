@@ -5,7 +5,6 @@ const auth = require('../middleware/authMiddleware');
 
 const upload = require('../middleware/upload');
 
-router.post('/', auth, uploadController.uploadFile);
-router.post('/avatar', auth, upload.single('avatar'), uploadController.uploadAvatar);
+router.post('/avatar', auth, upload.single('file'), uploadController.uploadAvatar);
 
 module.exports = router;

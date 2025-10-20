@@ -5,9 +5,20 @@ require('dotenv').config();
 const { connectDB } = require('./config/db');
 const logger = require('./utils/logger');
 const { initSocket } = require('./socket/socketManager');
+const loggingMiddleware = require('./middleware/loggingMiddleware');
+const crypto = require('crypto');
 
 const app = express();
 const server = http.createServer(app);
+
+// Add request ID
+app.use((req, res, next) => {
+  req.id = crypto.randomUUID();
+  next();
+});
+
+// Logging middleware
+app.use(loggingMiddleware);
 
 // Initialize Socket.IO and pass the server instance
 initSocket(server);

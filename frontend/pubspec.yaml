@@ -49,6 +49,7 @@ dependencies:
   upgrader: ^12.1.0
   flutter_webrtc: ^1.2.0
   image_picker: ^1.1.2
+  permission_handler: ^11.3.1
 
 dev_dependencies:
   flutter_test:

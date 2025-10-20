@@ -124,7 +124,7 @@ const registerChatHandlers = (io, socket, connectedUsers) => {
             { sender: withUserDoc._id, recipient: socket.user._id, isRead: false },
             { $set: { isRead: true } }
         );
-        logger.info(`[ChatHandler] Marked ${updateResult.nModified} messages as read.`);
+        logger.info(`[ChatHandler] Marked ${updateResult.nModified || 0} messages as read.`);
         const senderSocketId = connectedUsers[withUser];
         if (senderSocketId) {
             io.to(senderSocketId).emit('messages marked as read', { byUser: socket.user.username, withUser: socket.user.username });

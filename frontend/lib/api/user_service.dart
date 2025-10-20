@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/api/api_service.dart';
+import 'dart:typed_data';
 
 class UserService with ChangeNotifier {
   final ApiService _apiService;
@@ -9,11 +10,14 @@ class UserService with ChangeNotifier {
 
   Future<User> getUserProfile(String userId) async {
     final response = await _apiService.get('/api/users/profile/$userId');
-    return User.fromJson(response);
+    if (response.containsKey('user')) {
+      return User.fromJson(response['user']);
+    }
+    throw Exception('User data not found in response');
   }
 
   Future<void> updateUserProfile(String bio, String avatar, String language) async {
-    await _apiService.post('/api/users/profile', {
+    await _apiService.put('/api/users/profile', {
       'bio': bio,
       'avatar': avatar,
       'language': language,
@@ -35,8 +39,8 @@ class UserService with ChangeNotifier {
     return null;
   }
 
-  Future<String> uploadAvatar(String imagePath) async {
-    final response = await _apiService.uploadFile('/api/upload/avatar', imagePath);
+  Future<String> uploadAvatar(Uint8List fileBytes, String filename) async {
+    final response = await _apiService.uploadFile('/api/upload/avatar', fileBytes, filename);
     return response['avatarUrl'];
   }
 }

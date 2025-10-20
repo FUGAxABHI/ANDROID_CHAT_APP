@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/models/user.dart';
 import 'package:frontend/models/friend_request.dart';
-import 'package:frontend/friends_service.dart';
-
+import 'package:frontend/api/friends_service.dart';
 import 'dart:async';
-import 'package:frontend/socket_service.dart';
+import 'package:frontend/services/socket_service.dart';
 
 class FriendsProvider with ChangeNotifier {
   final FriendsService _friendsService;
@@ -63,7 +62,16 @@ class FriendsProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      _friends = await _friendsService.getFriends();
+      final fetchedFriends = await _friendsService.getFriends();
+      final uniqueFriends = <User>[];
+      final seenIds = <String>{};
+      for (var friend in fetchedFriends) {
+        if (!seenIds.contains(friend.id)) {
+          uniqueFriends.add(friend);
+          seenIds.add(friend.id);
+        }
+      }
+      _friends = uniqueFriends;
     } catch (e) {
       _friendsError = e.toString();
     }
@@ -90,7 +98,8 @@ class FriendsProvider with ChangeNotifier {
   Future<void> acceptFriendRequest(String requestId) async {
     try {
       await _friendsService.acceptFriendRequest(requestId);
-      // The socket event will handle the state update
+      _friendRequests.removeWhere((req) => req.id == requestId);
+      notifyListeners();
     } catch (e) {
       // Handle error
     }

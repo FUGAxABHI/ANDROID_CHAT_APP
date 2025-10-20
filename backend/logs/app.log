@@ -1,0 +1,426 @@
+{"level":30,"time":1760937041586,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"ab21bba7-610f-4fd4-bcfc-99b1554b2db2","msg":"Friend handler initialized"}
+{"level":30,"time":1760937043349,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"b98069f6-5aa4-4f07-94ad-f7852480db91","msg":"Server running on port 3000"}
+{"level":30,"time":1760937052999,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"a45f5bcf-7ffa-48fc-bffc-0f06b82fcf45","method":"OPTIONS","url":"/api/auth/login","statusCode":204,"duration":4}
+{"level":30,"time":1760937053018,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"e28057dd-d08c-47ad-accd-156f369e838b","msg":"[Login] Attempting login for user: fuga"}
+{"level":30,"time":1760937053140,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"15e60184-9ae4-40f2-a59d-9a172569ede8","msg":"[Login] Successfully generated JWT for user 'fuga'."}
+{"level":30,"time":1760937053142,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"dbd9ac86-7238-45f0-9f1e-b95d091c4a40","method":"POST","url":"/api/auth/login","statusCode":200,"duration":141}
+{"level":30,"time":1760937053515,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"98b9a206-7c3e-4893-968c-e311228ca0ce","method":"OPTIONS","url":"/api/users/all-conversations/68e3623437fb0c4916b668f1","statusCode":204,"duration":1}
+{"level":30,"time":1760937053518,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"9e1a0632-65a9-455a-afea-59445956c454","method":"OPTIONS","url":"/api/friends/requests","statusCode":204,"duration":0}
+{"level":30,"time":1760937053520,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"c4706343-b068-4951-8aca-826f88bc973b","method":"OPTIONS","url":"/api/friends","statusCode":204,"duration":1}
+{"level":30,"time":1760937053521,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"2bea3e92-a5a2-49ac-9b85-1fff74a15aff","method":"OPTIONS","url":"/api/users/profile/68e3623437fb0c4916b668f1","statusCode":204,"duration":0}
+{"level":30,"time":1760937053622,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"5a6ff82a-9906-4701-8a5c-39989f725599","msg":"[Socket Auth] Attempting to authenticate socket: wGFYs_Z6Z_nOaSNrAAAB"}
+{"level":30,"time":1760937053636,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"023f7b6b-7541-4a47-b4a0-70aac229f1f3","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760937053639,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"3512f67d-8ab7-4acf-80bb-c68675683fbe","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760937053643,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"c067ad61-41f1-4805-a523-50d947e2ed08","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760937053863,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"efd20007-fd6d-4a5e-bc72-8a3287afb387","method":"GET","url":"/api/friends/requests","statusCode":200,"duration":334}
+{"level":30,"time":1760937054001,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"4d33630f-a897-4a44-b550-cf075f5424bd","method":"GET","url":"/api/friends","statusCode":200,"duration":469}
+{"level":30,"time":1760937054308,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"08a313df-98ab-4825-92c0-bf89059e0b4b","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760937054388,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"2e383ec7-4b3d-4441-87b0-f80eca5500e2","msg":"[Socket Auth] User 'fuga' (ID: 68e3623437fb0c4916b668f1) authenticated and attached to socket. Socket ID: wGFYs_Z6Z_nOaSNrAAAB"}
+{"level":30,"time":1760937054388,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"c828f28f-5513-4f19-9f27-55ff2af0f492","msg":"[Socket Auth] User 'fuga' authenticated successfully. Socket ID: wGFYs_Z6Z_nOaSNrAAAB"}
+{"level":30,"time":1760937054388,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"156b16aa-947d-4240-91af-97c297ff9b59","msg":"[Socket Auth] Connected users: [\"fuga\"]"}
+{"level":30,"time":1760937054390,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"a5b0ce05-e616-4379-8fbd-8b799dafc71c","msg":"[SocketManager] User connected: fuga (Socket ID: wGFYs_Z6Z_nOaSNrAAAB)"}
+{"level":30,"time":1760937054392,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"f1dd50ad-56e3-4406-af41-1117a6020d3a","msg":"[Offline Messages] Checking for offline messages for user: fuga"}
+{"level":30,"time":1760937054602,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"b58bee70-45f8-4d32-af1b-dfba33354c9e","msg":"[Offline Messages] No new messages for fuga."}
+{"level":30,"time":1760937054608,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"4d177447-897b-4dfe-b7d2-64f73a0456c5","method":"GET","url":"/api/users/profile/68e3623437fb0c4916b668f1","statusCode":200,"duration":1073}
+{"level":30,"time":1760937055222,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"fd118c4c-8cae-4a4b-995b-cb8cadee6758","method":"GET","url":"/api/users/all-conversations/68e3623437fb0c4916b668f1","statusCode":200,"duration":1700}
+{"level":30,"time":1760937058135,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"71441fc2-cbf5-4cc9-ad49-315fab626ee0","method":"OPTIONS","url":"/api/users/username/abhinav","statusCode":204,"duration":1}
+{"level":30,"time":1760937058289,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"af35d5f3-ef12-4180-a27c-bc398aa8cdcd","method":"GET","url":"/api/users/username/abhinav","statusCode":200,"duration":153}
+{"level":30,"time":1760937058363,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"016e8978-7d4d-4fb4-8176-91a5db00d850","msg":"[ChatHandler] User fuga requested private messages with abhinav."}
+{"level":30,"time":1760937058378,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"f336c01d-af30-48a6-a688-8602a890d8b5","msg":"[ChatHandler] User fuga is marking messages with abhinav as read."}
+{"level":30,"time":1760937058604,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"d446b5dc-1205-4a1f-842f-cc707bec771f","msg":"[ChatHandler] Marked 0 messages as read."}
+{"level":30,"time":1760937058681,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"488fda0c-cd0b-4ba9-a23a-fa341b0b9d01","msg":"[ChatHandler] Found 63 private messages between fuga and abhinav."}
+{"level":30,"time":1760937062370,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"06fb6385-f7ee-4b6c-a579-37edbef37953","msg":"[CallHandler] Received 'call-user' from fuga to abhinav"}
+{"level":40,"time":1760937062370,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"e3604e0a-f5f7-4b9b-835d-e7e5bbd8051f","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937062458,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"39273693-b8d2-4e4f-aefa-12d80f78c8b2","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937062458,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"2d7cdaa9-8506-4ccc-a6ae-6dc3c5164583","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937062462,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"bdb72164-7681-429c-ba46-e7418e41f5c4","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937062462,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"4ada86ec-293d-49b5-8a98-3f5dc15db036","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937062900,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"58ea0978-a238-404d-a944-ba2dfe88490c","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937062900,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"5cc325a4-ccbf-4c45-a875-e64fb6ca99f5","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937062902,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"349e775b-2197-4e9a-8de2-cce0b774dbae","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937062902,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"f76d28b1-32ba-416b-83b8-d89c3d616385","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937073825,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"1243a0d8-b07f-4cfa-b901-effa299c5ade","msg":"[CallHandler] Received 'call-user' from fuga to abhinav"}
+{"level":40,"time":1760937073825,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"4483a53d-ce63-47cc-ac95-9336917587a5","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937073865,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"7ad7999c-5cbf-4a0c-adf8-4b715cdf6ea3","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937073865,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"82bb6d24-0148-460f-8dc4-7ae8c9c0f853","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937073873,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"fbacd6a7-f9bd-4e12-8052-bc669d25e513","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937073873,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"49c3e91d-907b-4499-afb7-1609a4312cbb","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937073898,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"71298621-c1f3-4bef-8acd-3ee73237f3c4","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937073898,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"a1e275d2-9a48-4fce-a973-5c91c5c39e66","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937073900,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"b8938a2f-d9d3-44a8-a2d1-a4d86c26d7c6","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937073900,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"e8795309-b6a5-459b-94ce-92ed2f283467","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937092390,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"029b9dba-8e12-4ff0-a4b3-e0be5f2a9f46","msg":"[CallHandler] Received 'call-user' from fuga to abhinav"}
+{"level":40,"time":1760937092390,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"174a834a-9b58-4ff6-8b21-1a97e44973bc","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937092408,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"b074fa89-31d7-4d95-92da-ecefa9e25a16","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937092408,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"b7655b73-774a-487b-a77b-196bfe269938","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937092410,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"f8235f91-ac57-4a36-952e-a44eb0f8b60c","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937092410,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"98c5becd-731e-445b-8940-75cd32357725","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937092493,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"e423d496-d419-4d46-a6e5-06c1183dd0ca","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937092493,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"1030a80e-8a91-4d09-968c-4e7b3f43431a","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937092552,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"e6386fa5-8b04-46eb-9866-5708335d0c4f","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937092552,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"d36c9475-307b-40de-8bc1-ea4d595ea3e8","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937109261,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"60aab507-df41-4d23-9701-495e4e687706","msg":"[CallHandler] Received 'call-user' from fuga to abhinav"}
+{"level":40,"time":1760937109262,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"f357e500-90f1-4f48-a7cb-131f0ac47d19","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937109273,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"d9e97616-c7de-4732-b4dd-8442b2796e8c","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937109273,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"b411f719-cb5d-414a-ab5f-65e431044c8a","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937109280,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"a144fc4c-bed2-4710-8825-0a3f2c7b5d33","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937109280,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"6f0b8b5f-0118-4f36-a67a-138197a1de3f","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937109280,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"31644945-7b8d-4623-b93a-6c5b3ee4081f","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937109280,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"97071fc2-42b9-4aaf-bc6a-8c32c799a430","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937109280,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"d3bcc687-4416-4560-9634-c104db76b289","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937109280,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"64117346-ec51-4e0f-b083-50798bf8d4c4","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937109319,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"da7526d2-1343-46e7-97a6-d154bfce3499","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937109320,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"26fc24ea-2ae6-425a-9cf3-db3c1a4b588f","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937109325,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"de5e2583-564f-4534-9450-4df0ef39c441","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937109325,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"51af14e7-d2ac-4f11-8c21-cbbd7b7d01d3","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937109325,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"7314de37-a5ae-42d1-8225-54f56ab12a1e","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937109325,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"2a3e0923-c161-47a9-bf13-8f4d8444b109","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937109325,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"ebe5eb2e-b1f9-4c52-a444-a9e592173be8","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937109325,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"e8f0bcd0-3c65-4ee0-9aa0-98c2d2290a62","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937245714,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"21c51096-132e-4e6c-9db9-d5087d33032c","msg":"[CallHandler] Received 'call-user' from fuga to abhinav"}
+{"level":40,"time":1760937245714,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"43754b1a-d525-4b2c-95ae-18d472b558d0","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937245776,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"2145d4ba-cf5a-4d99-97d0-dcf536e4805c","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937245776,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"939e721e-5a1e-4fc6-a4f1-44e226611420","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937245778,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"ee8aa8d3-22ea-470e-be6d-be45e6ff1bb8","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937245778,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"bbcc2088-6495-44f2-969e-43774774ebfd","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937245813,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"d11163e9-1c94-4b60-8ef4-16cdc528be43","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937245813,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"0333bbac-7a0c-454c-9256-a29f7901a116","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937245825,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"cad67e2d-380b-425d-a65e-65f8d3acd21d","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":40,"time":1760937245825,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"8478613d-376c-47f6-abf1-2f0db2a42d4b","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760937736232,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"dbb8f26c-3464-4a8d-99e4-1cf560db2542","method":"OPTIONS","url":"/api/auth/login","statusCode":204,"duration":1}
+{"level":30,"time":1760937736233,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"1cdc7710-850d-489f-9db7-d689e9662c3a","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937736401,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"90c2194f-e25c-4c6e-b153-b24fabe2cacf","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937736402,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"6b63b4bc-b369-41d8-827a-89b8dc1bc947","method":"POST","url":"/api/auth/login","statusCode":400,"duration":169}
+{"level":30,"time":1760937738491,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"eceb9025-e777-48a3-be5d-934b99156c2f","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937738642,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"b5d5961f-3dc2-468a-85d4-00d9a8faedef","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937738643,"pid":11976,"hostname":"DESKTOP-TF6Q6PI","requestId":"5db4ab5a-5381-4d36-ba9a-4d9cf74ec717","method":"POST","url":"/api/auth/login","statusCode":400,"duration":153}
+{"level":30,"time":1760937748864,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"bf4ba9d2-2c9c-4b23-8a98-d3a122a94997","msg":"Friend handler initialized"}
+{"level":30,"time":1760937750345,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"62f682cb-fb4e-43b5-921c-597febcff4f5","msg":"Server running on port 3000"}
+{"level":30,"time":1760937750421,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"b5c1efb6-1765-4464-a390-c2006e9d7a52","msg":"[Socket Auth] Attempting to authenticate socket: kor-LcVY3WcDkUl8AAAB"}
+{"level":30,"time":1760937750653,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"1cd5f51c-774d-418a-8258-ac44a78b48f8","msg":"[Socket Auth] User 'fuga' (ID: 68e3623437fb0c4916b668f1) authenticated and attached to socket. Socket ID: kor-LcVY3WcDkUl8AAAB"}
+{"level":30,"time":1760937750653,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"e966ea17-205e-4176-9018-d98278de4485","msg":"[Socket Auth] User 'fuga' authenticated successfully. Socket ID: kor-LcVY3WcDkUl8AAAB"}
+{"level":30,"time":1760937750653,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"ab0ba38f-64bf-41ea-b86b-41abd871d1e8","msg":"[Socket Auth] Connected users: [\"fuga\"]"}
+{"level":30,"time":1760937750655,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"a4290082-df76-4cf2-87b2-6e39d95a8d77","msg":"[SocketManager] User connected: fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937750657,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"0a3e2acb-ff5e-4ad6-81a2-1529c4982fce","msg":"[Offline Messages] Checking for offline messages for user: fuga"}
+{"level":30,"time":1760937750732,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"a09acd40-c9be-4417-894d-34d073970034","msg":"[Offline Messages] No new messages for fuga."}
+{"level":30,"time":1760937754852,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"18304a8a-d43b-44db-a32f-c24c8dd670c0","method":"OPTIONS","url":"/api/auth/login","statusCode":204,"duration":2}
+{"level":30,"time":1760937754871,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"275f785b-28ae-46e3-b1fa-9f6fc64cacea","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937755039,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"9f949165-c345-41ea-bdb3-1d1422d08afd","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937755042,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"7e70fe03-0b25-4a18-bbd2-034ddf604d24","method":"POST","url":"/api/auth/login","statusCode":400,"duration":187}
+{"level":30,"time":1760937756028,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"8b913da5-2e8b-4d0f-904a-9bebd8d98c0e","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937756164,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"5f5b2d55-e2e8-46be-b1c1-6b342912ae41","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937756165,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"31acb4e6-5af1-4c59-8941-2bc1e90361c9","method":"POST","url":"/api/auth/login","statusCode":400,"duration":138}
+{"level":30,"time":1760937757395,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"e071cf2b-51ce-49bf-920e-6af385cdb78b","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937757496,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"4a8e7520-3131-4e00-b06b-2799aa3b7149","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937757498,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"931e387c-e020-42ee-a057-24696d133402","method":"POST","url":"/api/auth/login","statusCode":400,"duration":104}
+{"level":30,"time":1760937759938,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"fca74d53-76fc-4576-b97b-ff30c70aa0d8","method":"OPTIONS","url":"/api/auth/login","statusCode":204,"duration":1}
+{"level":30,"time":1760937759941,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"365ff0dc-6b28-4f67-8908-5e53f27ad85c","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937760055,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"cb3493dd-8b41-41b3-9539-c753878b4791","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937760056,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"047175bf-6a1b-4b4e-8ad6-7fd4d2002a86","method":"POST","url":"/api/auth/login","statusCode":400,"duration":116}
+{"level":30,"time":1760937760220,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"b7d80c81-f061-47ff-97dc-05bf58e066c0","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937760349,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"1dead104-5372-434f-af9a-766d8341ea2b","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937760350,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"662ba2e2-2df4-4462-96e9-279cb827dd2b","method":"POST","url":"/api/auth/login","statusCode":400,"duration":130}
+{"level":30,"time":1760937760401,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"b0564550-2e0a-4e2f-9b03-ea1a29a6f2ca","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937760479,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d4f35fb4-7b13-40c8-a615-77eccb42d50a","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937760480,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"157903a2-77a5-45fe-acdb-d5f56f289d5a","method":"POST","url":"/api/auth/login","statusCode":400,"duration":79}
+{"level":30,"time":1760937760553,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"b3471a42-9bb5-4534-ac62-cb35e7006feb","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937760669,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"07a860d6-ba9d-4ac4-9e92-05df1baec8b3","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937760670,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"db718472-e3c3-4f2b-a9e6-bd9ab6c55dcb","method":"POST","url":"/api/auth/login","statusCode":400,"duration":117}
+{"level":30,"time":1760937760912,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"bdb66bf0-de08-4ed5-838a-5f0fb1bb1442","msg":"[Login] Attempting login for user: abhinav"}
+{"level":40,"time":1760937761079,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"1dc4baed-c3e7-4b65-811a-d8d9420a00a0","msg":"[Login] Auth failed: Invalid password for user 'abhinav'."}
+{"level":30,"time":1760937761080,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"15365067-5dfb-4241-a17f-aa70fc663181","method":"POST","url":"/api/auth/login","statusCode":400,"duration":169}
+{"level":30,"time":1760937785911,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"341b6b8f-a7a5-4897-8b6b-a668eec79dce","method":"OPTIONS","url":"/api/auth/login","statusCode":204,"duration":0}
+{"level":30,"time":1760937785914,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"fe23a15a-1dd4-4194-8e17-7f11c0f1da24","msg":"[Login] Attempting login for user: abhinav"}
+{"level":30,"time":1760937786067,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d05a4268-c06f-4afd-bf63-4862491c7b65","msg":"[Login] Successfully generated JWT for user 'abhinav'."}
+{"level":30,"time":1760937786069,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d506f75f-461c-4b12-bcee-5cef9be77e87","method":"POST","url":"/api/auth/login","statusCode":200,"duration":156}
+{"level":30,"time":1760937786339,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"4b15805e-b839-411a-bc46-e9f781cc25cb","method":"OPTIONS","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":204,"duration":1}
+{"level":30,"time":1760937786340,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"0f85564d-fd6f-441e-a58d-c3ac444dc809","method":"OPTIONS","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":204,"duration":1}
+{"level":30,"time":1760937786474,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"c7da65f3-b967-471a-9eb1-6b834b2bbe53","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760937786477,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"4b16ab00-328a-4b96-8dc0-f7b8930ecc97","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760937786580,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"24862a15-d94c-4839-a1b1-d5323aced1b3","method":"GET","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":304,"duration":237}
+{"level":30,"time":1760937786617,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"e678ff69-e577-4475-970b-058ae6f2aad3","msg":"[Socket Auth] Attempting to authenticate socket: 3KlXWlpu-TlcVAa8AAAD"}
+{"level":30,"time":1760937786681,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d9442fec-f3a6-4553-86a0-114cbea16255","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760937786688,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"2ba6d696-f587-4bef-89e6-c9362b1be28a","msg":"[Socket Auth] User 'abhinav' (ID: 68e3a20a28dce720cc6732b3) authenticated and attached to socket. Socket ID: 3KlXWlpu-TlcVAa8AAAD"}
+{"level":30,"time":1760937786688,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"7d5c0afe-a99b-4904-8264-5b2563f8c239","msg":"[Socket Auth] User 'abhinav' authenticated successfully. Socket ID: 3KlXWlpu-TlcVAa8AAAD"}
+{"level":30,"time":1760937786688,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"b7c4f8c2-85d3-4917-922c-bdf4c74faab1","msg":"[Socket Auth] Connected users: [\"fuga\",\"abhinav\"]"}
+{"level":30,"time":1760937786688,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"62406b67-9834-47e1-a135-7d90bf3f1e79","msg":"[SocketManager] User connected: abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937786689,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d8735fc1-8a7e-41f5-9a0e-bae7e9deb523","msg":"[Offline Messages] Checking for offline messages for user: abhinav"}
+{"level":30,"time":1760937786786,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"be733d2a-d096-4fb8-9f4b-64728e69893c","method":"GET","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":304,"duration":205}
+{"level":30,"time":1760937786787,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"72513ff5-8bd4-484c-9908-a3b818b54559","msg":"[Offline Messages] No new messages for abhinav."}
+{"level":30,"time":1760937787704,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"c38b0cd2-6012-4934-ba40-bd8f03507df7","method":"GET","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":304,"duration":1363}
+{"level":30,"time":1760937787787,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"a23762a4-331c-4d18-baa0-17f3c743e8bf","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760937788423,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"64baa44b-095b-4ab0-ac4c-b592baa8bf9a","method":"GET","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":304,"duration":717}
+{"level":30,"time":1760937791160,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"e246f3ac-fb27-480f-a1dd-a32991887963","method":"OPTIONS","url":"/api/users/username/fuga","statusCode":204,"duration":1}
+{"level":30,"time":1760937791289,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"91491a60-3680-48aa-b2ac-93e56a876d36","method":"GET","url":"/api/users/username/fuga","statusCode":304,"duration":128}
+{"level":30,"time":1760937791379,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"1c629724-f63d-4b93-9faa-50b0e0f308ae","msg":"[ChatHandler] User abhinav requested private messages with fuga."}
+{"level":30,"time":1760937791391,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"95a73372-b2c1-44cb-8491-bf337634cec3","msg":"[ChatHandler] User abhinav is marking messages with fuga as read."}
+{"level":30,"time":1760937791697,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"5f8f0f85-c7e8-47f0-ab9e-a0dc2a88e5c1","msg":"[ChatHandler] Marked 0 messages as read."}
+{"level":30,"time":1760937791908,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d7b2bd53-9fe0-4d2d-9611-b9be55d653a4","msg":"[ChatHandler] Found 63 private messages between abhinav and fuga."}
+{"level":30,"time":1760937801968,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"61387f94-5abc-43f9-bb3c-467e77c2c6dc","msg":"[CallHandler] Received 'call-user' from abhinav to fuga"}
+{"level":30,"time":1760937801968,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"eaecd288-e77a-421e-8f57-75c31c53c9ef","msg":"[CallHandler] Emitting 'call-made' to fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937801976,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"e7777661-3d23-4ad0-a957-3d3da7836cd3","msg":"[CallHandler] Received 'ice-candidate' from abhinav to fuga"}
+{"level":30,"time":1760937801976,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"ce98e320-7bbc-40d8-ba9a-e16f8babad86","msg":"[CallHandler] Emitting 'ice-candidate' to fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937801980,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"71bab3c2-3fa3-4fa3-8a6f-169409af141c","msg":"[CallHandler] Received 'ice-candidate' from abhinav to fuga"}
+{"level":30,"time":1760937801980,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"326e53a8-5351-41ab-a675-3d046c00064f","msg":"[CallHandler] Emitting 'ice-candidate' to fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937801981,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"05d1df4b-de14-4c8c-9ac3-549a516ee29f","msg":"[CallHandler] Received 'ice-candidate' from abhinav to fuga"}
+{"level":30,"time":1760937801982,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"30f72fe1-18be-44bd-bd2c-763ff90f1232","msg":"[CallHandler] Emitting 'ice-candidate' to fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937801982,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"751fbb03-7996-4b6e-b799-b13c04b172de","msg":"[CallHandler] Received 'ice-candidate' from abhinav to fuga"}
+{"level":30,"time":1760937801982,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"9196725e-4eb9-4005-9ffb-783ba4637bb6","msg":"[CallHandler] Emitting 'ice-candidate' to fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937802143,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"e8c5c160-00fd-4516-8735-5cd053fb5ea0","msg":"[CallHandler] Received 'ice-candidate' from abhinav to fuga"}
+{"level":30,"time":1760937802143,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"06b4bf48-e9ff-45cb-897a-70ca47646aaf","msg":"[CallHandler] Emitting 'ice-candidate' to fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937802146,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"7c7ad21b-c8ee-4052-a0de-1021a0d32900","msg":"[CallHandler] Received 'ice-candidate' from abhinav to fuga"}
+{"level":30,"time":1760937802146,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"421f6495-dc70-4cea-a462-a89c9360dee4","msg":"[CallHandler] Emitting 'ice-candidate' to fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937802146,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d333dd61-327c-48a8-b495-8f19dd86d164","msg":"[CallHandler] Received 'ice-candidate' from abhinav to fuga"}
+{"level":30,"time":1760937802146,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"20732ba3-d3df-43ee-af53-74708c9ae18e","msg":"[CallHandler] Emitting 'ice-candidate' to fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937802146,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"21a2a92e-c384-437b-afe0-d4bd98cb9db4","msg":"[CallHandler] Received 'ice-candidate' from abhinav to fuga"}
+{"level":30,"time":1760937802146,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"2ee20807-5fce-44da-8774-459ee09bf8f2","msg":"[CallHandler] Emitting 'ice-candidate' to fuga (Socket ID: kor-LcVY3WcDkUl8AAAB)"}
+{"level":30,"time":1760937807215,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"376aa0f3-0f18-4f12-9e06-b67544c89a2e","msg":"[CallHandler] Received 'call-user' from fuga to abhinav"}
+{"level":30,"time":1760937807215,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"f5846aa5-b6ea-40fe-981f-0cdbb3aa3872","msg":"[CallHandler] Emitting 'call-made' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937807272,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"358d0bae-8562-4205-9e7c-16a31ef188e2","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937807272,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"7f9ebb79-7b3b-4633-a18e-b98afadf4aba","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937807274,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"6cb20af5-a9e9-4340-8296-b4e2364d79a6","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937807274,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"3109b94a-c195-4363-8fad-7d8e8e591610","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937807357,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"50665cc2-3ed7-4ba2-9ba5-70087da05a50","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937807357,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d72f7643-953a-45dc-a84b-859a435c586c","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937807359,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"94a4837d-8da3-4055-8ae8-6cf692752eb8","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937807359,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"ddcf993a-8f21-4ba0-932f-4deebe062a10","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937816075,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"849a2b86-a6a3-4731-978d-24a7acfb0b5b","msg":"[CallHandler] Received 'call-user' from fuga to abhinav"}
+{"level":30,"time":1760937816075,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d0046eb4-5f7b-43a9-affc-e328f6da378b","msg":"[CallHandler] Emitting 'call-made' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937816167,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"82fe2a64-01b2-4dbd-9ec1-18727f528f5c","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937816167,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"33ed302f-8bb4-4729-a66b-9268769daf16","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937816177,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"23840482-019d-4682-bd96-4a31f8a206e1","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937816177,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d571f02b-672f-4ff0-bae1-052a851fddbd","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937816180,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"c2d14028-2320-4adf-b5a9-9632394675af","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937816180,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"e6bb0937-b1d3-4ec0-82de-d2573e92746e","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937816275,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"ade7564f-4a64-4e42-8ab1-eb8eee4c9f62","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937816275,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"cc0cf608-7bee-44fe-8ae1-0578a784a069","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937835164,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"6aced7bf-08d2-4008-8197-7ef390573f97","msg":"[CallHandler] Received 'call-user' from fuga to abhinav"}
+{"level":30,"time":1760937835165,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"f9362a2b-4ae5-401e-8d24-7c75a2cfa63b","msg":"[CallHandler] Emitting 'call-made' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937835186,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"76e10e31-c66c-4bce-b11b-f42bcf427916","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937835187,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"38f7c0e4-fe22-4ade-bf28-9d130f17d9b6","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937835202,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"a14260ba-f0b4-413c-a294-d6b6b06b7dc4","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937835202,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"4e98722e-731b-417a-bfcf-b26c34bb5710","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937835202,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"32dce754-bcd1-4d80-874d-3eb55dddb26a","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937835202,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"a9c47ceb-cf81-4a4a-a467-58df5957b0dd","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937835238,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"230d016b-35a8-4d9c-88e4-a593059601d7","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937835238,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"1d56918f-c129-4099-bdcb-fdebc81c8c81","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937835277,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"6d9bb739-9161-4e44-97c6-442da3691fc9","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937835277,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"e413d764-7dcc-405b-adc6-a250c0effdae","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937835281,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"8efc967a-591c-4f88-85b5-3e6db59a9d0a","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937835281,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"d06409c8-e8fc-42e8-8f4b-bf29bfe7aa96","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937835281,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"9ee699da-b3de-409b-9a5e-6dc79bbc7bc9","msg":"[CallHandler] Received 'ice-candidate' from fuga to abhinav"}
+{"level":30,"time":1760937835281,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"cda4f4fe-8041-4678-a7c0-e0051fa1f06a","msg":"[CallHandler] Emitting 'ice-candidate' to abhinav (Socket ID: 3KlXWlpu-TlcVAa8AAAD)"}
+{"level":30,"time":1760937841761,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"97321881-4d14-4598-b219-27c681793790","msg":"[SocketManager] User disconnected: fuga. Remaining users: 1"}
+{"level":30,"time":1760937843086,"pid":2576,"hostname":"DESKTOP-TF6Q6PI","requestId":"0308a043-61bc-49d8-b7b7-6089a36db05a","msg":"[SocketManager] User disconnected: abhinav. Remaining users: 0"}
+{"level":30,"time":1760937907241,"pid":20276,"hostname":"DESKTOP-TF6Q6PI","requestId":"520a2b93-910a-44f6-ac25-3c0f85f9093c","msg":"Friend handler initialized"}
+{"level":30,"time":1760937909468,"pid":20276,"hostname":"DESKTOP-TF6Q6PI","requestId":"015d9bcc-093e-4c92-aea7-dab83dba2a8f","msg":"Server running on port 3000"}
+{"level":30,"time":1760941610840,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"c14bd9d0-8616-432b-91a1-995f5fee68cc","msg":"Friend handler initialized"}
+{"level":30,"time":1760941612453,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"f28d429b-6e9f-4192-991e-aea19c4331ed","msg":"Server running on port 3000"}
+{"level":30,"time":1760941935117,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"5b6d02fb-a82e-4d7a-a5d4-5050c2f40cfd","method":"OPTIONS","url":"/api/auth/login","statusCode":204,"duration":6}
+{"level":30,"time":1760941935139,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"0cf4f84d-5fab-468a-9581-9c3f3f3ec9fc","msg":"[Login] Attempting login for user: fuga"}
+{"level":30,"time":1760941935241,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"26c09c56-fed0-4f33-804f-eda6c0956ea7","msg":"[Login] Successfully generated JWT for user 'fuga'."}
+{"level":30,"time":1760941935243,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"eb58186a-d2f9-4b2b-a4c8-35d88b8bd295","method":"POST","url":"/api/auth/login","statusCode":200,"duration":124}
+{"level":30,"time":1760941935659,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"678762fd-3fef-46ec-afac-a5e0de16ff98","method":"OPTIONS","url":"/api/users/all-conversations/68e3623437fb0c4916b668f1","statusCode":204,"duration":1}
+{"level":30,"time":1760941935661,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"85d679a2-dcc7-4ae5-865d-e6aa3c444a4c","method":"OPTIONS","url":"/api/friends/requests","statusCode":204,"duration":1}
+{"level":30,"time":1760941935662,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"7506fb38-40fc-436a-8d59-b855e98b11fc","method":"OPTIONS","url":"/api/friends","statusCode":204,"duration":0}
+{"level":30,"time":1760941935664,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"c439782b-6feb-4605-bb7f-4f6b56310ea1","method":"OPTIONS","url":"/api/users/profile/68e3623437fb0c4916b668f1","statusCode":204,"duration":1}
+{"level":30,"time":1760941935819,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"ed9c26bf-eb95-4077-978f-76d0734333fa","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760941935823,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"682d96e6-8b64-46af-830f-ed279011c531","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760941935825,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"fce69284-b70e-49f3-bd60-dff0b055e03f","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760941935920,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"15af70b9-fcdb-4167-a4d3-20805bfe5619","msg":"[Socket Auth] Attempting to authenticate socket: Tp7Gz-zmBI8bCSRjAAAB"}
+{"level":30,"time":1760941935947,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"4f381c5c-ff6c-43fc-85e4-4d755e176535","method":"GET","url":"/api/friends/requests","statusCode":200,"duration":275}
+{"level":30,"time":1760941936056,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"ee6d50f9-d6e5-4984-b12c-424948b703b4","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760941936068,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"4216498b-edb8-436c-b8ff-4482e860ab81","method":"GET","url":"/api/friends","statusCode":200,"duration":394}
+{"level":30,"time":1760941936159,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"7822c11a-0a21-4524-8c66-05fd535be56d","method":"GET","url":"/api/friends/requests","statusCode":304,"duration":192}
+{"level":30,"time":1760941936161,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"0d18ae5a-53f4-49e3-a91d-320cb6a63b29","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760941936776,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"05c9bda6-f613-4d16-ac66-ed197fd23a52","msg":"[Socket Auth] User 'fuga' (ID: 68e3623437fb0c4916b668f1) authenticated and attached to socket. Socket ID: Tp7Gz-zmBI8bCSRjAAAB"}
+{"level":30,"time":1760941936776,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"c3c2dbcf-76c9-4bb2-83d3-451b207a9403","msg":"[Socket Auth] User 'fuga' authenticated successfully. Socket ID: Tp7Gz-zmBI8bCSRjAAAB"}
+{"level":30,"time":1760941936776,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"0a3d1ac6-fcb4-4343-ac0f-a38d196cdb6c","msg":"[Socket Auth] Connected users: [\"fuga\"]"}
+{"level":30,"time":1760941936777,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"68411ed2-7ee7-4724-a5e8-060199a1ac9d","msg":"[SocketManager] User connected: fuga (Socket ID: Tp7Gz-zmBI8bCSRjAAAB)"}
+{"level":30,"time":1760941936778,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"300c4aa3-99b7-4098-87fe-56f0963dd710","msg":"[Offline Messages] Checking for offline messages for user: fuga"}
+{"level":30,"time":1760941936781,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"19c47f93-6a71-40da-bf73-e5ff95f01884","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760941936858,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"1ef753c0-b9e6-4e5b-8d32-1474d2c31ddd","method":"GET","url":"/api/friends","statusCode":304,"duration":789}
+{"level":30,"time":1760941936930,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"5ee13eaa-6638-47a4-8cf9-ab47acdb6298","msg":"[Offline Messages] No new messages for fuga."}
+{"level":30,"time":1760941936937,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"165ce29a-a9e5-4085-92d3-7f8709215752","method":"GET","url":"/api/users/profile/68e3623437fb0c4916b668f1","statusCode":200,"duration":1260}
+{"level":30,"time":1760941937055,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"12ca4c02-87af-4700-8325-5b02e14fd446","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760941937178,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"197da6c8-a023-4f02-865c-5c9bd2c934f6","method":"GET","url":"/api/users/profile/68e3623437fb0c4916b668f1","statusCode":304,"duration":240}
+{"level":30,"time":1760941937371,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"49a332ff-bf40-435e-a1f1-8785a7ce0a06","method":"GET","url":"/api/users/all-conversations/68e3623437fb0c4916b668f1","statusCode":200,"duration":1706}
+{"level":30,"time":1760941937457,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"be8ebb6c-e58c-4b13-8c6a-adaa02597a39","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760941938610,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"9306bff4-8b92-44e0-8582-b28315b5ed32","method":"GET","url":"/api/users/all-conversations/68e3623437fb0c4916b668f1","statusCode":304,"duration":1237}
+{"level":30,"time":1760941949287,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"2b07b122-7ed2-4b1a-a298-28ad18f8ff8b","method":"OPTIONS","url":"/api/auth/login","statusCode":204,"duration":1}
+{"level":30,"time":1760941949290,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"6d989d46-b072-4680-b8d9-086855f602a6","msg":"[Login] Attempting login for user: abhinav"}
+{"level":30,"time":1760941949465,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"787d58cc-968f-4516-8cfb-99642053244b","msg":"[Login] Successfully generated JWT for user 'abhinav'."}
+{"level":30,"time":1760941949467,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"a684a7b5-b22d-4433-971f-7fffeb29e0b5","method":"POST","url":"/api/auth/login","statusCode":200,"duration":178}
+{"level":30,"time":1760941949828,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"a536fbcb-2cf0-4979-9895-1cb9957b08a9","method":"OPTIONS","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":204,"duration":1}
+{"level":30,"time":1760941949831,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"b2b9f9e2-e29d-40eb-8f35-66347247d430","method":"OPTIONS","url":"/api/friends","statusCode":204,"duration":0}
+{"level":30,"time":1760941949832,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"fae3d86e-c463-4b22-8037-4830fe9ad79d","method":"OPTIONS","url":"/api/friends/requests","statusCode":204,"duration":1}
+{"level":30,"time":1760941949834,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"aa24f70b-3b2a-4b04-8884-e42e0d404f12","method":"OPTIONS","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":204,"duration":0}
+{"level":30,"time":1760941949938,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"25f396f3-586f-4f12-94ad-bfe7c92d0455","msg":"[Socket Auth] Attempting to authenticate socket: ztAeVQCfwM779YFKAAAD"}
+{"level":30,"time":1760941949951,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"58661829-deea-40f3-ae09-01aab62d9d6b","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760941949955,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"686be894-5a3f-4306-8306-77919ffd3ea9","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760941949957,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"b2968708-e6da-4eac-9a21-d774dc6353f1","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760941949959,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"60586135-bbe4-4906-ae65-ca1cde68a44f","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760941950014,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"4ee54ddc-4bd5-4b53-bd57-934b177fc368","msg":"[Socket Auth] User 'abhinav' (ID: 68e3a20a28dce720cc6732b3) authenticated and attached to socket. Socket ID: ztAeVQCfwM779YFKAAAD"}
+{"level":30,"time":1760941950014,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"a91fa5f2-28de-44ac-9a3c-e7a7dd40e1d2","msg":"[Socket Auth] User 'abhinav' authenticated successfully. Socket ID: ztAeVQCfwM779YFKAAAD"}
+{"level":30,"time":1760941950014,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"dd904d25-575f-4e68-97b4-d96315e88e49","msg":"[Socket Auth] Connected users: [\"fuga\",\"abhinav\"]"}
+{"level":30,"time":1760941950015,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"2bfc2c61-8979-442e-894c-c1b7a8bea857","msg":"[SocketManager] User connected: abhinav (Socket ID: ztAeVQCfwM779YFKAAAD)"}
+{"level":30,"time":1760941950015,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"16e3adef-7de3-4209-9a6d-880de9b8f1e7","msg":"[Offline Messages] Checking for offline messages for user: abhinav"}
+{"level":30,"time":1760941950020,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"a19488dc-2e6d-42b1-b80c-66ea8acecdc9","method":"GET","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":200,"duration":180}
+{"level":30,"time":1760941950022,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"16efe3d5-48dd-4d48-be99-a17ff50639e6","method":"GET","url":"/api/friends/requests","statusCode":200,"duration":183}
+{"level":30,"time":1760941950075,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"cbffecb4-b723-406a-971a-cf64618bf796","msg":"[Offline Messages] No new messages for abhinav."}
+{"level":30,"time":1760941950099,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"228af8ea-d16e-4495-82ed-edcbd3668187","method":"GET","url":"/api/friends","statusCode":200,"duration":262}
+{"level":30,"time":1760941950489,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"0c8ade96-f421-4e26-b3b7-2e3ca4c1d5cd","method":"GET","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":200,"duration":654}
+{"level":30,"time":1760941951827,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"dd611062-ba49-42d5-aa4d-119e7ab8957a","method":"OPTIONS","url":"/api/users/username/fuga","statusCode":204,"duration":1}
+{"level":30,"time":1760941951920,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"8f346dbf-c7c5-418b-bb0c-a4ac584a3ac6","method":"GET","url":"/api/users/username/fuga","statusCode":200,"duration":92}
+{"level":30,"time":1760941952076,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"61c6bd75-b83f-481d-a634-e35cb9decd27","msg":"[ChatHandler] User abhinav requested private messages with fuga."}
+{"level":30,"time":1760941952091,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"8718366a-47c3-41c5-baef-87d7651b5bf1","msg":"[ChatHandler] User abhinav is marking messages with fuga as read."}
+{"level":30,"time":1760941952447,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"d4b90c38-3c27-4090-aebc-5d8b38aa0679","msg":"[ChatHandler] Marked 0 messages as read."}
+{"level":30,"time":1760941952537,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"08aebc1a-6a0a-414c-aa20-746c6f1ff4a0","msg":"[ChatHandler] Found 63 private messages between abhinav and fuga."}
+{"level":30,"time":1760942121537,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"37649c1f-fa2a-4738-83ca-4be1b56a34bf","method":"OPTIONS","url":"/api/upload/avatar","statusCode":204,"duration":1}
+{"level":30,"time":1760942121703,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"cb62bdc5-704d-4ad5-b179-51cf930d52c8","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942121716,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"cef36fcb-7f78-400f-9295-4c81d32e5838","method":"POST","url":"/api/upload/avatar","statusCode":500,"duration":177}
+{"level":30,"time":1760942124390,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"b42558ba-fcf7-4213-b69a-4924216cb29a","method":"OPTIONS","url":"/api/users/profile","statusCode":204,"duration":2}
+{"level":30,"time":1760942124486,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"97c6ccb7-1ffe-4ce1-b3f1-cbbfa460c2f5","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942124771,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"cb70dd79-2e54-4798-b87c-f9472a37a250","method":"PUT","url":"/api/users/profile","statusCode":200,"duration":380}
+{"level":30,"time":1760942124781,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"6212ffb4-aede-46bb-ba31-3463c35d8637","method":"OPTIONS","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":204,"duration":1}
+{"level":30,"time":1760942124986,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"cac27beb-05a8-4071-8ff2-537503d19df3","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942125084,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"750cc748-c591-40ba-9cef-29ed4b5da621","method":"GET","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":304,"duration":302}
+{"level":30,"time":1760942127765,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"86e6dc3f-0698-4d1e-92f6-70cbdb80d2c3","method":"OPTIONS","url":"/api/friends","statusCode":204,"duration":2}
+{"level":30,"time":1760942127950,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"418c203b-7e3d-4a29-9e8d-144e2709a13c","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942128157,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"c20933a6-ab60-4ce1-b684-12f3c7b6d45e","method":"GET","url":"/api/friends","statusCode":304,"duration":391}
+{"level":30,"time":1760942130329,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"4e8d1a3f-ecc4-4730-8626-fbb3ba48e9c4","method":"OPTIONS","url":"/api/users/profile/68e3623437fb0c4916b668f1","statusCode":204,"duration":0}
+{"level":30,"time":1760942130510,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"84e95c32-b746-4a82-b4ab-0b96b85b23dc","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942130615,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"6d98eb42-2405-4820-97f6-c808b98a94af","method":"GET","url":"/api/users/profile/68e3623437fb0c4916b668f1","statusCode":200,"duration":284}
+{"level":30,"time":1760942144270,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"96d0af26-f583-43fc-a0a5-977b6d331bf5","method":"OPTIONS","url":"/api/users/search?query=satyam","statusCode":204,"duration":1}
+{"level":30,"time":1760942145154,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"ce6c5c40-d08b-45c0-a708-60ec1a16125d","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942145154,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"31cef3fc-4f22-457f-a23b-111ecf8ea819","msg":"Searching for users with query: \"satyam\""}
+{"level":30,"time":1760942145261,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"8fdbc6f8-703b-4f74-8e6a-212948c69527","method":"GET","url":"/api/users/search?query=satyam","statusCode":200,"duration":990}
+{"level":30,"time":1760942146815,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"b47fe491-7abc-4a3c-9c69-e8cf4a84f239","method":"OPTIONS","url":"/api/users/profile/68e5033a1d793e5918804299","statusCode":204,"duration":1}
+{"level":30,"time":1760942146999,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"710eecf2-6bfe-4a77-9533-03f968d3a1b9","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942147524,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"02f29e6d-6af8-4db7-92d2-3757bd3ae2d9","method":"GET","url":"/api/users/profile/68e5033a1d793e5918804299","statusCode":200,"duration":708}
+{"level":30,"time":1760942150154,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"56f5e1e5-054a-421b-a416-aab7219e7c3b","method":"OPTIONS","url":"/api/users/username/Satyam","statusCode":204,"duration":0}
+{"level":30,"time":1760942150787,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"02eebd7c-828a-4b4a-8c1c-89fd5a94b883","method":"GET","url":"/api/users/username/Satyam","statusCode":404,"duration":631}
+{"level":30,"time":1760942272088,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"8d2c943d-8d0c-4e1b-97ae-3cc50f30c5ef","msg":"[Socket Auth] Attempting to authenticate socket: uQGAHHfmTblmiJtPAAAF"}
+{"level":30,"time":1760942272235,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"84396925-20e4-4125-b5f7-0de9f12e8349","msg":"[Socket Auth] User 'abhinav' (ID: 68e3a20a28dce720cc6732b3) authenticated and attached to socket. Socket ID: uQGAHHfmTblmiJtPAAAF"}
+{"level":30,"time":1760942272235,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"77babd52-7fdf-48b4-ae46-83886c9f4d3d","msg":"[Socket Auth] User 'abhinav' authenticated successfully. Socket ID: uQGAHHfmTblmiJtPAAAF"}
+{"level":30,"time":1760942272235,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"67ff14d2-0e91-4396-a265-733fadce938b","msg":"[Socket Auth] Connected users: [\"fuga\",\"abhinav\"]"}
+{"level":30,"time":1760942272235,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"b86e3de1-60b4-48bb-b853-181d191e1744","msg":"[SocketManager] User connected: abhinav (Socket ID: uQGAHHfmTblmiJtPAAAF)"}
+{"level":30,"time":1760942272236,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"89d2d345-3d7b-444a-b90b-b94cf184b7d2","msg":"[Offline Messages] Checking for offline messages for user: abhinav"}
+{"level":30,"time":1760942272337,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"4be10c06-c0c4-410a-b677-38cbc53d9c5c","msg":"[Offline Messages] No new messages for abhinav."}
+{"level":30,"time":1760942272733,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"fd61be37-0200-4165-a7cd-3eb8dd64ce91","method":"OPTIONS","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":204,"duration":0}
+{"level":30,"time":1760942272737,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"ec91bdef-9da5-4a70-b823-b355fac8e41e","method":"OPTIONS","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":204,"duration":0}
+{"level":30,"time":1760942272738,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"6d807b1b-5320-4625-a9f2-1420c646a26b","method":"OPTIONS","url":"/api/friends/requests","statusCode":204,"duration":1}
+{"level":30,"time":1760942272738,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"5fc8a6ec-80ad-4743-80fc-02b963092533","method":"OPTIONS","url":"/api/friends","statusCode":204,"duration":0}
+{"level":30,"time":1760942272739,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"d9200914-a416-4a02-98d2-fa63aa23a3aa","method":"OPTIONS","url":"/api/friends/requests","statusCode":204,"duration":0}
+{"level":30,"time":1760942272740,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"4dde6765-e36f-43e2-b4be-f465ae38c15a","method":"OPTIONS","url":"/api/friends","statusCode":204,"duration":1}
+{"level":30,"time":1760942272740,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"cb8cd96a-2be8-44ce-b139-555d553a0a16","method":"OPTIONS","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":204,"duration":0}
+{"level":30,"time":1760942272744,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"9bd53384-242e-40bf-8df8-25a91d8149df","method":"OPTIONS","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":204,"duration":1}
+{"level":30,"time":1760942272813,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"96513cc0-2102-407e-85de-59a1ca122001","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942272818,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"06dcb39c-37b9-4fa7-88d9-72040cff6b08","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942272819,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"06bba8cc-4e62-4b54-b517-09c39f6de129","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942272824,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"fdfbbe18-8b84-49cb-b198-b55ebfd55967","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942272893,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"7946a382-f9c6-4efb-88fc-58f58f69bb52","method":"GET","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":304,"duration":143}
+{"level":30,"time":1760942272895,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"56c99f6c-c4cb-458e-8439-5a730ee025fd","method":"GET","url":"/api/friends/requests","statusCode":304,"duration":148}
+{"level":30,"time":1760942272962,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"fb3e4b54-c12b-4eeb-8767-ada8f3bdc822","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942272965,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"1e53dd7f-65dc-4b4f-95af-44cdb16ba52e","method":"GET","url":"/api/friends","statusCode":304,"duration":216}
+{"level":30,"time":1760942272966,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"72b04547-83db-4c39-8952-5b89736483b3","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942273053,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"aae194a1-d092-41a4-9cf6-9b09b8ae7aa0","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942273055,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"c1c1efa3-1e54-4fab-ab79-114cadf2d00d","method":"GET","url":"/api/friends/requests","statusCode":304,"duration":157}
+{"level":30,"time":1760942273056,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"9e4082a4-38d0-49b6-8ee9-f8fab7bd5c55","method":"GET","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":304,"duration":160}
+{"level":30,"time":1760942273257,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"ab59c7d3-e32c-4e9e-acca-49921d2648fc","method":"GET","url":"/api/friends","statusCode":304,"duration":290}
+{"level":30,"time":1760942273325,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"43137d5c-dc8a-40c8-9855-632208c663c7","method":"GET","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":304,"duration":581}
+{"level":30,"time":1760942273386,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"796838ed-6ccc-458f-9ca7-a93f879c550a","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760942274177,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"98e142ab-af87-4953-bd8b-97513a9f2f41","method":"GET","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":304,"duration":851}
+{"level":30,"time":1760942283281,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"d1308d5f-e04a-4a99-87e4-f2fa15efb6bf","method":"OPTIONS","url":"/api/users/username/fuga","statusCode":204,"duration":1}
+{"level":30,"time":1760942283393,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"ff704b6e-4e00-4ba1-b73d-640daf2a8a24","method":"GET","url":"/api/users/username/fuga","statusCode":304,"duration":111}
+{"level":30,"time":1760942283416,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"7f369a19-e58a-488b-8c4e-a5f0ef2ca8dc","msg":"[ChatHandler] User abhinav requested private messages with fuga."}
+{"level":30,"time":1760942283419,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"c94f78c3-e317-4f9f-84ec-fbdd808da0c1","msg":"[ChatHandler] User abhinav is marking messages with fuga as read."}
+{"level":30,"time":1760942283813,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"1875af74-2a5b-480a-9629-e4391278a761","msg":"[ChatHandler] Marked 0 messages as read."}
+{"level":30,"time":1760942283886,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"cfd0d99e-a6ab-4a18-8e3d-adb357d83dd3","msg":"[ChatHandler] Found 63 private messages between abhinav and fuga."}
+{"level":30,"time":1760942292743,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"cbd5e334-ab3f-4c04-ad4b-442d6b599be2","msg":"[CallHandler] Received 'call-user' from abhinav to fuga"}
+{"level":30,"time":1760942292744,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"4e0d0e44-d622-4422-a39d-f46c1cc4c5c2","msg":"[CallHandler] Emitting 'call-made' to fuga (Socket ID: Tp7Gz-zmBI8bCSRjAAAB)"}
+{"level":30,"time":1760942313855,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"10b35657-8a28-409c-a2a9-72c6280aa7b1","msg":"[CallHandler] Received 'call-ended' from fuga to abhinav"}
+{"level":30,"time":1760942313855,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"cc117a34-b35c-419c-998f-4a0c542d838c","msg":"[CallHandler] Emitting 'call-ended' to abhinav (Socket ID: uQGAHHfmTblmiJtPAAAF)"}
+{"level":30,"time":1760942322308,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"91516f9d-4c39-464b-a48a-93a35ea8fee7","msg":"[CallHandler] Received 'call-ended' from fuga to abhinav"}
+{"level":30,"time":1760942322308,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"1327fe56-90e4-4113-9f67-3aa09f7c00dc","msg":"[CallHandler] Emitting 'call-ended' to abhinav (Socket ID: uQGAHHfmTblmiJtPAAAF)"}
+{"level":30,"time":1760942324885,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"6315a44f-d176-4b22-867b-d81a8e687e31","msg":"[CallHandler] Received 'call-ended' from abhinav to fuga"}
+{"level":30,"time":1760942324885,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"36314508-2192-45c5-9082-4c7a6b93faba","msg":"[CallHandler] Emitting 'call-ended' to fuga (Socket ID: Tp7Gz-zmBI8bCSRjAAAB)"}
+{"level":30,"time":1760942328888,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"a4cd3da3-c28b-49d8-b11a-e450063d7dc8","msg":"[CallHandler] Received 'call-user' from abhinav to fuga"}
+{"level":30,"time":1760942328888,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"d583b2cf-a776-450b-8ad9-abd6ebdd53e1","msg":"[CallHandler] Emitting 'call-made' to fuga (Socket ID: Tp7Gz-zmBI8bCSRjAAAB)"}
+{"level":30,"time":1760942343608,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"bdcc1b5b-c463-483f-9917-6dad214827e7","msg":"[CallHandler] Received 'call-ended' from fuga to abhinav"}
+{"level":30,"time":1760942343608,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"1edd160f-40a0-4f54-87eb-9c076e8a1ffd","msg":"[CallHandler] Emitting 'call-ended' to abhinav (Socket ID: uQGAHHfmTblmiJtPAAAF)"}
+{"level":30,"time":1760942346075,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"7d0702a1-e9b5-42d1-b832-ff750387ac9c","msg":"[CallHandler] Received 'call-rejected' from fuga to abhinav"}
+{"level":30,"time":1760942346075,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"52e641d3-d28d-48ce-a634-e7a09aa35f62","msg":"[CallHandler] Emitting 'call-rejected' to abhinav (Socket ID: uQGAHHfmTblmiJtPAAAF)"}
+{"level":30,"time":1760942348525,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"c17c5bad-eaa9-42a0-a5c6-5ee5ca670926","msg":"[SocketManager] User disconnected: fuga. Remaining users: 1"}
+{"level":30,"time":1760942350406,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"405317fd-56fa-4eb4-b6db-4375478f694a","msg":"[CallHandler] Received 'call-ended' from abhinav to fuga"}
+{"level":40,"time":1760942350406,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"8de98221-8210-47b0-bbed-0b96f7d1c1cd","msg":"[CallHandler] Receiver fuga not found in connectedUsers."}
+{"level":30,"time":1760942353710,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"9e27c399-2e90-4a3b-8e80-350fdb2dfe34","msg":"[SocketManager] User disconnected: abhinav. Remaining users: 0"}
+{"level":30,"time":1760942353711,"pid":10040,"hostname":"DESKTOP-TF6Q6PI","requestId":"ec786b3f-10a7-4825-a014-63e1dae0a49b","msg":"[SocketManager] User disconnected: abhinav. Remaining users: 0"}
+{"level":30,"time":1760943220982,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"f8c32bec-0a95-452f-a7bd-0adfd9542d26","msg":"Friend handler initialized"}
+{"level":30,"time":1760943222331,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"3a136fa4-95ee-4c60-8557-2e0b7f4e2a3e","msg":"Server running on port 3000"}
+{"level":30,"time":1760943575396,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"32136bdb-b334-487f-854c-b4768a8d3e46","method":"OPTIONS","url":"/api/auth/login","statusCode":204,"duration":3}
+{"level":30,"time":1760943575416,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"22349a04-e855-4cbb-8585-af86e9b18755","msg":"[Login] Attempting login for user: abhinav"}
+{"level":30,"time":1760943575525,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"e3376c79-c8bb-4a9b-b1d2-275560e9374c","msg":"[Login] Successfully generated JWT for user 'abhinav'."}
+{"level":30,"time":1760943575528,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"fb2b77fe-3017-4b32-91aa-e4f1a2711721","method":"POST","url":"/api/auth/login","statusCode":200,"duration":130}
+{"level":30,"time":1760943575790,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"92684389-9d88-48b4-8440-0b66f7ccfe37","method":"OPTIONS","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":204,"duration":1}
+{"level":30,"time":1760943575792,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"4a594013-ae7b-4d33-89fb-d82dfeca7651","method":"OPTIONS","url":"/api/friends/requests","statusCode":204,"duration":1}
+{"level":30,"time":1760943575793,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"c62f84fa-3f51-4f4d-ab8a-6e1ff3552e59","method":"OPTIONS","url":"/api/friends","statusCode":204,"duration":1}
+{"level":30,"time":1760943575803,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"923c6b2d-7fe9-4060-aff0-b67952e7de60","method":"OPTIONS","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":204,"duration":1}
+{"level":30,"time":1760943575912,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"926590c5-7f8d-45aa-8013-01585e30a683","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760943575917,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"5ecdec41-c3e4-416e-ad6f-3b8b75ea3d96","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760943575921,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"53577558-06d6-489a-a6c0-f0a9342703f0","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760943575929,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"b48fa6e3-2fe8-47d5-857e-7473377451eb","msg":"[Socket Auth] Attempting to authenticate socket: hAbVI4jHkF5UWMgPAAAB"}
+{"level":30,"time":1760943576030,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"d97b474d-1a2d-4dc7-8379-9b7bb42eafb9","method":"GET","url":"/api/friends/requests","statusCode":200,"duration":224}
+{"level":30,"time":1760943576132,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"7288be67-048e-481a-bb62-d89cdd2b6d1c","method":"GET","url":"/api/friends","statusCode":200,"duration":329}
+{"level":30,"time":1760943576542,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"fe31a55e-1250-402f-8573-8eed05d93ca3","method":"GET","url":"/api/users/all-conversations/68e3a20a28dce720cc6732b3","statusCode":200,"duration":748}
+{"level":30,"time":1760943576741,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"47535115-29aa-41b6-b9ff-20ceb97eb4d6","msg":"[AuthMiddleware] User authenticated: abhinav"}
+{"level":30,"time":1760943576743,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"2720bdb6-ee54-4f2c-9c40-572d22792e80","msg":"[Socket Auth] User 'abhinav' (ID: 68e3a20a28dce720cc6732b3) authenticated and attached to socket. Socket ID: hAbVI4jHkF5UWMgPAAAB"}
+{"level":30,"time":1760943576743,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"8f4998b1-ed36-42f7-af5d-d16d04f710b7","msg":"[Socket Auth] User 'abhinav' authenticated successfully. Socket ID: hAbVI4jHkF5UWMgPAAAB"}
+{"level":30,"time":1760943576743,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"58cf3d8f-1973-4e8a-80f5-1ba53a8f4660","msg":"[Socket Auth] Connected users: [\"abhinav\"]"}
+{"level":30,"time":1760943576744,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"34b4984e-2ec2-45ec-a67f-93e93eed5bc0","msg":"[SocketManager] User connected: abhinav (Socket ID: hAbVI4jHkF5UWMgPAAAB)"}
+{"level":30,"time":1760943576745,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"7c609e99-f19d-4f38-8802-7dc8561290d3","msg":"[Offline Messages] Checking for offline messages for user: abhinav"}
+{"level":30,"time":1760943576845,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"a59e7d9f-64fd-4825-b51e-8cc17c4ca555","method":"GET","url":"/api/users/profile/68e3a20a28dce720cc6732b3","statusCode":200,"duration":1037}
+{"level":30,"time":1760943576846,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"9cbbe20b-aa37-4403-bc10-774d12b146a1","msg":"[Offline Messages] No new messages for abhinav."}
+{"level":30,"time":1760943578170,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"f5c6617d-8227-4e4b-8374-94533c393c51","method":"OPTIONS","url":"/api/users/username/fuga","statusCode":204,"duration":2}
+{"level":30,"time":1760943578278,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"7b3a0a64-be1e-48ea-8fd2-ff6399108d97","method":"GET","url":"/api/users/username/fuga","statusCode":200,"duration":90}
+{"level":30,"time":1760943578314,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"4124928e-187b-467e-b423-6b09f7d40b6b","msg":"[ChatHandler] User abhinav requested private messages with fuga."}
+{"level":30,"time":1760943578335,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"8e5e9640-9af0-4ce1-9a74-2cd518ab42ba","msg":"[ChatHandler] User abhinav is marking messages with fuga as read."}
+{"level":30,"time":1760943578671,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"d246fff3-1607-473f-8122-34f7498dc6a4","msg":"[ChatHandler] Marked 0 messages as read."}
+{"level":30,"time":1760943578757,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"bbf08ddf-360c-49f6-95e9-539676f54440","msg":"[ChatHandler] Found 63 private messages between abhinav and fuga."}
+{"level":30,"time":1760943582528,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"f9a66b10-aedf-43a2-b20d-4029fe64e3bf","method":"OPTIONS","url":"/api/auth/login","statusCode":204,"duration":1}
+{"level":30,"time":1760943582532,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"ed004333-e514-4e07-9065-25f21a939eb7","msg":"[Login] Attempting login for user: fuga"}
+{"level":30,"time":1760943582697,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"bc21924f-8bb5-4baa-b022-4a4712379cb9","msg":"[Login] Successfully generated JWT for user 'fuga'."}
+{"level":30,"time":1760943582698,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"cc2a7166-fa01-4456-8b1c-deb432b5e84e","method":"POST","url":"/api/auth/login","statusCode":200,"duration":168}
+{"level":30,"time":1760943583107,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"0238e3b7-16c8-4f39-a6a0-b12c97e080df","method":"OPTIONS","url":"/api/users/all-conversations/68e3623437fb0c4916b668f1","statusCode":204,"duration":0}
+{"level":30,"time":1760943583113,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"8b0ffa4f-34d5-4a9a-bbf2-e7d02978a1fe","method":"OPTIONS","url":"/api/friends/requests","statusCode":204,"duration":1}
+{"level":30,"time":1760943583114,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"560bf193-8c16-4793-b0e9-9f9da4a0406d","method":"OPTIONS","url":"/api/friends","statusCode":204,"duration":1}
+{"level":30,"time":1760943583115,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"33ef061a-5432-42a4-ae8f-b814e9a126df","method":"OPTIONS","url":"/api/users/profile/68e3623437fb0c4916b668f1","statusCode":204,"duration":0}
+{"level":30,"time":1760943583253,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"45c355e8-7357-4b27-801a-1482d062fc75","msg":"[Socket Auth] Attempting to authenticate socket: 3Y_rwZ8WQk_aahkfAAAD"}
+{"level":30,"time":1760943583263,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"a0266bd2-b1bc-419c-a68a-f827063f0396","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760943583267,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"b496a7f2-a6f1-4b48-ba97-f79b43efa2b0","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760943583271,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"755aac5e-0693-413f-ad77-8120c923cf14","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760943583274,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"fb41f77f-4ad8-4209-a84e-c48d4e3d6f5e","msg":"[AuthMiddleware] User authenticated: fuga"}
+{"level":30,"time":1760943583399,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"37494e1a-80b1-4918-92bd-d2be6e04ac53","method":"GET","url":"/api/friends/requests","statusCode":200,"duration":280}
+{"level":30,"time":1760943583400,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"a180bb70-f6f6-4994-b55c-a7841db0fd38","msg":"[Socket Auth] User 'fuga' (ID: 68e3623437fb0c4916b668f1) authenticated and attached to socket. Socket ID: 3Y_rwZ8WQk_aahkfAAAD"}
+{"level":30,"time":1760943583400,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"9af90286-f06c-4d61-866a-a80b2a049145","msg":"[Socket Auth] User 'fuga' authenticated successfully. Socket ID: 3Y_rwZ8WQk_aahkfAAAD"}
+{"level":30,"time":1760943583400,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"2616f268-4b73-43d1-b2a3-d711967cebaa","msg":"[Socket Auth] Connected users: [\"abhinav\",\"fuga\"]"}
+{"level":30,"time":1760943583401,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"9b6153a5-eb50-4353-aad5-77462dcfa896","msg":"[SocketManager] User connected: fuga (Socket ID: 3Y_rwZ8WQk_aahkfAAAD)"}
+{"level":30,"time":1760943583402,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"51d4b337-c7dd-4b78-9cab-f34dd8813f59","msg":"[Offline Messages] Checking for offline messages for user: fuga"}
+{"level":30,"time":1760943583413,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"adab5cf3-0caa-43d9-95ae-f48c433d0c52","method":"GET","url":"/api/users/profile/68e3623437fb0c4916b668f1","statusCode":200,"duration":286}
+{"level":30,"time":1760943583500,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"addc3cad-f426-472f-bb21-72b9f8056208","msg":"[Offline Messages] No new messages for fuga."}
+{"level":30,"time":1760943583507,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"35e32dd4-e567-4256-955f-9705c8d3f710","method":"GET","url":"/api/friends","statusCode":200,"duration":384}
+{"level":30,"time":1760943584628,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"b0909e39-67ec-4a4f-b05a-69468ac9c4fc","method":"GET","url":"/api/users/all-conversations/68e3623437fb0c4916b668f1","statusCode":200,"duration":1512}
+{"level":30,"time":1760943586623,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"ac889707-c698-4418-8d7a-39afa9ced9f5","method":"OPTIONS","url":"/api/users/username/abhinav","statusCode":204,"duration":0}
+{"level":30,"time":1760943586779,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"410a480b-9706-4f2e-974e-e8bb68a50678","method":"GET","url":"/api/users/username/abhinav","statusCode":200,"duration":137}
+{"level":30,"time":1760943586834,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"594dbf2d-70d4-4190-9f15-6d7574e19044","msg":"[ChatHandler] User fuga requested private messages with abhinav."}
+{"level":30,"time":1760943586857,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"2d69f140-c1f5-4677-bdd5-e0fe1afb4821","msg":"[ChatHandler] User fuga is marking messages with abhinav as read."}
+{"level":30,"time":1760943587188,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"48e1149b-5be3-43b8-aa90-7ecde1404eb3","msg":"[ChatHandler] Marked 0 messages as read."}
+{"level":30,"time":1760943587273,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"c33f4363-cf79-4f9b-8daa-4b949ca3b64c","msg":"[ChatHandler] Found 63 private messages between fuga and abhinav."}
+{"level":30,"time":1760943593507,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"a1478d28-c816-43be-a82a-ebc428e2603b","msg":"[CallHandler] Received 'call-user' from abhinav to fuga"}
+{"level":30,"time":1760943593508,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"83bc06a1-aa33-4955-9599-d1f7dfb91704","msg":"[CallHandler] Emitting 'call-made' to fuga (Socket ID: 3Y_rwZ8WQk_aahkfAAAD)"}
+{"level":30,"time":1760943598860,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"81e4d8ae-f875-4c4d-9c4b-7f24c20b5895","msg":"[SocketManager] User disconnected: abhinav. Remaining users: 1"}
+{"level":30,"time":1760943611739,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"b4be7d25-eb07-4398-b344-05fc85d45f0d","msg":"[CallHandler] Received 'call-ended' from fuga to abhinav"}
+{"level":40,"time":1760943611739,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"53bb2c55-c1f9-4df2-8eac-a5a2fcc3a95f","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760943613936,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"72fceb2d-c31c-4ea0-a616-7926cb943e07","msg":"[CallHandler] Received 'call-rejected' from fuga to abhinav"}
+{"level":40,"time":1760943613937,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"be439b94-f20a-46d0-8e4c-f5ca1def92fe","msg":"[CallHandler] Receiver abhinav not found in connectedUsers."}
+{"level":30,"time":1760943617058,"pid":2728,"hostname":"DESKTOP-TF6Q6PI","requestId":"7ff4af88-41c1-4e32-976c-bb9262661210","msg":"[SocketManager] User disconnected: fuga. Remaining users: 0"}
